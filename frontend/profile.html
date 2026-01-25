@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Profile • College Connect</title>
+  <style>
+    body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+    h1 {
+  font-size: 34px;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+}
+
+h2 {
+  margin-top: 28px;
+  margin-bottom: 14px;
+  color: #9ca3af;
+}
+
+    .card {
+  background: #020617;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(34,197,94,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+#items, #posts {
+  text-align: left;
+}
+
+
+.page {
+  max-width: 820px;
+  width: 100%;
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+text-align: center;
+}
+
+    .muted {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+    button {
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  margin-top: 10px;
+  margin-right: 6px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(34,197,94,0.4),
+    transparent
+  );
+  margin: 26px 0;
+}
+
+.verification-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.badge-verified {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.4);
+}
+
+.badge-pending {
+  background: rgba(234,179,8,0.15);
+  color: #facc15;
+  border: 1px solid rgba(234,179,8,0.4);
+}
+
+.badge-unverified {
+  background: rgba(239,68,68,0.15);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.4);
+}
+@media (max-width: 640px) {
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+
+  .page {
+    padding: 16px;
+  }
+
+  #avatar {
+    width: 96px;
+    height: 96px;
+  }
+
+  button {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+<div class="page">
+
+
+<h1><span style="color:#22c55e">Profile</span></h1>
+
+<img id="avatar"
+     src=""
+     style="
+       width:120px;
+       height:120px;
+       border-radius:50%;
+       object-fit:cover;
+       border: 3px solid rgba(34,197,94,0.4);
+       box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+     ">
+<br><br>
+
+<div id="avatarControls">
+  <input type="file" id="avatarInput" accept="image/*">
+  <button onclick="uploadAvatar()">Update Profile Picture</button>
+</div>
+
+<div id="profileBox">
+<hr>
+
+<div id="changePasswordWrapper" style="display:none">
+  <hr>
+  <h2>Change Password</h2>
+
+  <button onclick="toggleChangePassword()">Change Password</button>
+
+  <div id="changePasswordSection" style="display:none">
+    <div class="card">
+      <input type="password" id="oldPassword" placeholder="Current password">
+      <input type="password" id="newPassword" placeholder="New password">
+      <input type="password" id="confirmPassword" placeholder="Confirm new password">
+
+      <button onclick="changePassword()">Update Password</button>
+      <p id="passwordStatus" class="muted"></p>
+    </div>
+  </div>
+</div>
+<div id="verificationAction"></div>
+  <h2 id="profileName">
+  <span id="verificationBadge"></span>
+</h2>
+  <p id="profileEmail" class="muted"></p>
+  <p id="profileCollege" class="muted"></p>
+  <button id="chatBtn" style="display:none">Message</button>
+  <div id="friendActions"></div>
+  <div id="reportBox"></div>
+  <hr>
+</div>
+
+<h2>Marketplace Listings</h2>
+<div id="items"></div>
+
+<h2>Forum Posts</h2>
+<div id="posts"></div>
+
+<script>
+
+
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+const myEmail = localStorage.getItem("email");
+const payload = JSON.parse(atob(token.split(".")[1]));
+const isModerator = payload.role === "moderator" || payload.role === "admin";
+
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.clear();
+    alert("Your account has been banned or logged out.");
+    window.location.href = "login.html";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
+}
+
+if (!token) {
+  alert("Not logged in");
+}
+
+/* ================= HELPERS ================= */
+
+function headers() {
+  return { Authorization: "Bearer " + token };
+}
+
+const params = new URLSearchParams(window.location.search);
+const profileEmail = params.get("email") || params.get("user");
+const identifier = profileEmail ? profileEmail : "me";
+
+
+function renderVerificationCTA(status) {
+  const box = document.getElementById("verificationAction");
+  if (!box) return;
+
+  box.innerHTML = "";
+
+if (status !== "unverified") return;
+
+  box.innerHTML = `
+    <div class="card">
+      <b>Account not verified</b><br>
+      <span class="muted">
+        Upload your college ID for manual verification
+      </span><br><br>
+
+      <input type="file" id="verificationFiles" multiple accept="image/*">
+      <br>
+      <button id="submitVerificationBtn" onclick="submitVerification()">
+  Submit Verification
+</button>
+    </div>
+  `;
+}
+
+async function submitVerification() {
+const btn = document.getElementById("submitVerificationBtn");
+btn.disabled = true;
+btn.textContent = "Submitting...";
+
+const input = document.getElementById("verificationFiles");
+if (!input || !input.files.length) {
+  btn.disabled = false;                 
+  btn.textContent = "Submit Verification"; 
+  alert("Please select at least one image");
+  return;
+}
+
+  const formData = new FormData();
+  [...input.files].forEach(f => {
+    formData.append("proof", f);
+  });
+
+  const res = await authFetch(`${API}/verification/submit`, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!res.ok) {
+    const msg = await res.text();
+    btn.disabled = false;
+btn.textContent = "Submit Verification";
+alert(msg || "Verification failed");
+return;
+  }
+
+  alert("Verification submitted. Await moderator approval.");
+  loadProfile(); // refresh badge + UI
+}
+
+/* ================= LOAD PROFILE ================= */
+
+async function loadProfile() {
+  const res = await authFetch(`${API}/profile/${identifier}`);
+
+  if (!res.ok) {
+    alert("Failed to load profile");
+    return;
+  }
+
+  const user = await res.json();
+
+const badge = document.getElementById("verificationBadge");
+badge.className = "verification-badge";
+
+if (user.verificationStatus === "verified") {
+  badge.textContent = "Verified";
+  badge.classList.add("badge-verified");
+} else if (user.verificationStatus === "pending") {
+  badge.textContent = "Verification Pending";
+  badge.classList.add("badge-pending");
+} else {
+  badge.textContent = "Unverified";
+  badge.classList.add("badge-unverified");
+}
+renderVerificationCTA(user.verificationStatus);
+  // 🔒 hide avatar upload for other users
+  if (!user.isSelf) {
+    document.getElementById("avatarControls").style.display = "none";
+  }
+
+  // 🔐 Only friends or self can see marketplace + forum on profile
+  if (user.isSelf || user.isFriend) {
+    loadItems();
+    loadPosts();
+  } else {
+    document.getElementById("items").innerHTML =
+      "<div class='muted'>Only friends can view marketplace listings</div>";
+    document.getElementById("posts").innerHTML =
+      "<div class='muted'>Only friends can view forum posts</div>";
+  }
+
+  document.getElementById("profileName").prepend(document.createTextNode(user.name + " "));
+
+
+if (user.isSelf) {
+
+  // ✅ SHOW change-password button ONLY for self
+  document.getElementById("changePasswordWrapper").style.display = "block";
+} else {
+  // ❌ HIDE completely for others
+  document.getElementById("changePasswordWrapper").style.display = "none";
+}
+
+  const avatar = document.getElementById("avatar");
+  avatar.src = user.profilePic
+    ? `${API}/uploads/${user.profilePic}`
+    : `${API}/uploads/default-avatar.png`;
+
+  avatar.onerror = () => {
+    avatar.src = `${API}/uploads/default-avatar.png`;
+  };
+
+  document.getElementById("profileEmail").textContent = user.email;
+  document.getElementById("profileCollege").textContent = user.college;
+
+  const actions = document.getElementById("friendActions");
+  actions.innerHTML = "";
+
+ // 🔴 RESET ONCE
+const reportBox = document.getElementById("reportBox");
+reportBox.innerHTML = "";
+
+
+if (!user.isSelf) {
+  if (isModerator) {
+    const btn = document.createElement("button");
+btn.textContent = user.isBanned ? "Unban User" : "Ban User";
+btn.style.background = user.isBanned ? "#22c55e" : "#e5e7eb";
+btn.style.color = user.isBanned ? "#000" : "#000";
+
+
+btn.addEventListener("click", async () => {
+ 
+
+  const endpoint = user.isBanned
+    ? "/moderator/unban-user"
+    : "/moderator/ban-user";
+
+  const res = await authFetch(API + endpoint, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ userId: user._id })
+});
+
+
+  loadProfile();
+});
+
+reportBox.appendChild(btn);
+  } else {
+  // 🚫 NORMAL USERS CANNOT REPORT MODERATORS / ADMINS
+  if (user.role === "moderator" || user.role === "admin") {
+    reportBox.innerHTML = "";
+  } else {
+    reportBox.innerHTML = `
+      <button onclick="reportUser('${user._id}')">Report User</button>
+    `;
+  }
+}
+}
+
+
+  // ✅ OWN PROFILE → NO ACTION BUTTONS
+  if (user.isSelf) {
+    actions.innerHTML = "";
+    document.getElementById("reportBox").innerHTML = "";
+    return;
+  }
+
+
+
+  // own profile → no friend actions
+  if (user.email === myEmail) {
+    // do nothing here, but DO NOT return
+  } else {
+    // show chat button only if viewing someone else
+    const btn = document.getElementById("chatBtn");
+    btn.style.display = "inline-block";
+    btn.onclick = () => {
+      window.location.href = `/chat.html?with=${user.email}`;
+    };
+  }
+
+  // blocked by them
+  if (user.blockedYou) {
+    actions.innerHTML = "<button disabled>You are blocked</button>";
+    return;
+  }
+
+  // you blocked them
+  if (user.isBlocked) {
+    actions.innerHTML = `
+      <button onclick="unblockUser()">Unblock</button>
+    `;
+    return;
+  }
+
+  // friends
+  if (user.isFriend) {
+    actions.innerHTML = `
+      <button onclick="unfriendUser()">Unfriend</button>
+      <button onclick="blockUser()">Block</button>
+    `;
+    return;
+  }
+
+  // not friends
+  actions.innerHTML = `
+    <button onclick="sendFriendRequest()">Add Friend</button>
+    <button onclick="blockUser()">Block</button>
+  `;
+
+  // show chat button only if viewing someone else
+  if (user.email !== myEmail) {
+    const btn = document.getElementById("chatBtn");
+    btn.style.display = "inline-block";
+    btn.onclick = () => {
+      window.location.href = `/chat.html?with=${user.email}`;
+    };
+  }
+}
+/* ================= LOAD MARKETPLACE ITEMS ================= */
+
+async function loadItems() {
+  const res = await authFetch(`${API}/profile/${identifier}/items`);
+
+  const items = await res.json();
+  const box = document.getElementById("items");
+  box.innerHTML = "";
+
+  if (!items.length) {
+    box.innerHTML = "<div class='muted'>No listings</div>";
+    return;
+  }
+
+  items.forEach(i => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+  <a href="/marketplace.html#item=${i._id}" style="text-decoration:none;color:inherit">
+    <b>${i.title}</b><br>
+    ₹${i.price}<br>
+    Status: ${i.status || "AVAILABLE"}
+  </a>
+`;
+    box.appendChild(div);
+  });
+}
+
+/* ================= LOAD FORUM POSTS ================= */
+
+async function loadPosts() {
+  const res = await authFetch(`${API}/profile/${identifier}/posts`);
+
+  const posts = await res.json();
+  const box = document.getElementById("posts");
+  box.innerHTML = "";
+
+  if (!posts.length) {
+    box.innerHTML = "<div class='muted'>No posts</div>";
+    return;
+  }
+
+  posts.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+  <a href="/forum.html#post=${p._id}" style="text-decoration:none;color:inherit">
+    <b>${p.title || "Post"}</b><br>
+    <span class="muted">${(p.content || "").slice(0,120)}</span>
+  </a>
+`;
+    box.appendChild(div);
+  });
+}
+
+/* ================= INIT ================= */
+
+loadProfile();
+/*loadItems();
+loadPosts();*/
+function startChat() {
+  window.location.href = `/chat.html?with=${profileEmail}`;
+}
+
+  function sendFriendRequest() {
+  authFetch(`${API}/send-request?toEmail=${profileEmail}`)
+    .then(loadProfile);
+}
+
+function unfriendUser() {
+  authFetch(`${API}/unfriend?email=${profileEmail}`)
+    .then(loadProfile);
+}
+
+function blockUser() {
+  authFetch(`${API}/block?email=${profileEmail}`)
+    .then(loadProfile);
+}
+
+function unblockUser() {
+  authFetch(`${API}/unblock?email=${profileEmail}`)
+    .then(loadProfile);
+}
+async function reportUser(userId) {
+  const reason = prompt("Reason for reporting this user?");
+  if (!reason) return;
+
+ await authFetch(`${API}/report`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    targetType: "user",
+    targetId: userId,
+    reason
+  })
+});
+
+  alert("User reported");
+}
+
+
+async function uploadAvatar() {
+  const file = document.getElementById("avatarInput").files[0];
+  if (!file) return alert("Select an image");
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await authFetch(`${API}/profile/upload-pic`, {
+  method: "POST",
+  body: formData
+});
+
+  if (!res.ok) {
+    alert("Upload failed");
+    return;
+  }
+
+  loadProfile(); // refresh avatar
+}
+
+window.toggleBan = async function (userId, isBanned) {
+  
+
+  const endpoint = isBanned
+    ? "/moderator/unban-user"
+    : "/moderator/ban-user";
+
+ const res = await authFetch(API + endpoint, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ userId })
+});
+
+
+  loadProfile();
+};
+async function changePassword() {
+  const oldPassword = document.getElementById("oldPassword").value;
+const newPassword = document.getElementById("newPassword").value;
+const confirmPassword = document.getElementById("confirmPassword").value;
+const status = document.getElementById("passwordStatus");
+
+status.textContent = "";
+
+const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+if (!passwordRegex.test(newPassword)) {
+  status.textContent =
+    "Password must be 8+ chars with letters, numbers & special characters";
+  return;
+}
+
+  status.textContent = "";
+
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    status.textContent = "All fields are required";
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    status.textContent = "Passwords do not match";
+    return;
+  }
+
+  const res = await authFetch(`${API}/change-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ oldPassword, newPassword })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    status.textContent = data.message || "Failed to change password";
+    return;
+  }
+
+  status.style.color = "#22c55e";
+  status.textContent = "Password changed successfully";
+
+  document.getElementById("oldPassword").value = "";
+  document.getElementById("newPassword").value = "";
+  document.getElementById("confirmPassword").value = "";
+}
+function toggleChangePassword() {
+  const box = document.getElementById("changePasswordSection");
+  box.style.display = box.style.display === "none" ? "block" : "none";
+}
+// 🔍 IMAGE CLICK PREVIEW (PROFILE)
+document.addEventListener("click", e => {
+  if (e.target.tagName === "IMG") {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imageModalImg");
+
+    modalImg.src = e.target.src;
+    modal.style.display = "flex";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("imageModal");
+  const closeBtn = document.getElementById("closeImageModal");
+
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+</script>
+</div>
+<div id="imageModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+">
+
+  <span id="closeImageModal"
+        style="
+          position:absolute;
+          top:16px;
+          right:20px;
+          font-size:32px;
+          font-weight:bold;
+          color:white;
+          cursor:pointer;
+          z-index:10000;
+        ">&times;</span>
+
+  <img id="imageModalImg" style="
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+  ">
+</div>
+</body>
+</html>

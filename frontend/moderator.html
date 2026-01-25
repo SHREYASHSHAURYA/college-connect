@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Moderator Panel • College Connect</title>
+  <style>
+    body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+ display: block;
+
+}
+
+    .card {
+  background: #020617;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(34,197,94,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+.page {
+  max-width: 900px;
+  width: 100%;
+ margin: 40px auto; 
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  margin-right: 6px;
+  margin-top: 6px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+
+h1 {
+  font-size: 34px;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+}
+
+h2 {
+  margin-top: 28px;
+  margin-bottom: 14px;
+  color: #9ca3af;
+}
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(34,197,94,0.4),
+    transparent
+  );
+  margin: 26px 0;
+}
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+.status-pending {
+  background: rgba(234,179,8,0.15);
+  color: #facc15;
+  border: 1px solid rgba(234,179,8,0.4);
+}
+
+.status-reviewed {
+  background: rgba(148,163,184,0.15);
+  color: #cbd5f5;
+  border: 1px solid rgba(148,163,184,0.4);
+}
+
+.status-action_taken {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.4);
+}
+@media (max-width: 640px) {
+
+  body {
+    padding: 0 10px;
+  }
+
+  .page {
+    padding: 16px;
+    border-radius: 10px;
+  }
+button {
+    width: 100%;
+    margin-right: 0;
+  }
+
+}
+
+
+  </style>
+</head>
+<body>
+<div class="page">
+
+<h1><span style="color:#22c55e">Moderator</span> Reports</h1>
+
+<h2>Banned Users</h2>
+<div id="bannedUsers"></div>
+
+<h2>Verification Requests</h2>
+<div id="verificationRequests"></div>
+<h2>Contact Messages</h2>
+<div id="contactMessages"></div>
+
+<hr>
+
+<h2>Reports</h2>
+<div id="reports"></div>
+</div>
+
+<script>
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+async function loadBannedUsers() {
+  const res = await fetch(`${API}/moderator/banned-users`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!res.ok) return;
+
+  const users = await res.json();
+  const box = document.getElementById("bannedUsers");
+  box.innerHTML = "";
+
+  if (!users.length) {
+    box.innerHTML = "<div class='card'>No banned users</div>";
+    return;
+  }
+
+  users.forEach(u => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+  <b>${u.name}</b><br>
+  ${u.email}<br>
+  ${u.college}<br><br>
+
+  <button onclick="viewUser('${u.email}')">View</button>
+  <button onclick="unbanUser('${u._id}')">Unban</button>
+`;
+    box.appendChild(div);
+  });
+}
+
+async function loadReports() {
+  const res = await fetch(`${API}/reports`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!res.ok) {
+    document.body.innerHTML = "Access denied";
+    return;
+  }
+
+  const reports = await res.json();
+  const box = document.getElementById("reports");
+  box.innerHTML = "";
+
+  reports.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.id = `report-${r._id}`;
+
+    div.innerHTML = `
+      <b>Type:</b> ${r.targetType}<br>
+      <b>Target ID:</b> ${r.targetType === "user" ? (r.targetUser && r.targetUser._id) : r.targetId}<br>
+      <b>Reason:</b> ${r.reason}<br>
+      <b>Status:</b>
+      <span class="status status-${r.status}">
+        ${r.status.replace("_", " ")}
+      </span><br><br>
+    `;
+
+    // VIEW
+    div.innerHTML += `<button>View</button>`;
+    div.querySelector("button:last-child").onclick = () =>
+      openTarget(
+        r.targetType,
+        r.targetType === "user" ? r.targetUser._id : r.targetId
+      );
+
+    // FORUM DELETE
+    if (r.targetType === "forum" && r.status === "pending") {
+      const b = document.createElement("button");
+      b.textContent = "Delete Post";
+      b.onclick = () => deleteForum(r.targetId, r._id);
+      div.appendChild(b);
+    }
+
+    // MARKETPLACE DELETE
+    if (r.targetType === "marketplace" && r.status === "pending") {
+      const b = document.createElement("button");
+      b.textContent = "Delete Item";
+      b.onclick = () => deleteItem(r.targetId, r._id);
+      div.appendChild(b);
+    }
+
+    // USER BAN / UNBAN
+    if (r.targetType === "user" && r.targetUser) {
+      const b = document.createElement("button");
+
+      if (r.status === "action_taken") {
+        b.textContent = "Unban User";
+        b.onclick = () => unbanUser(r.targetUser._id);
+      } else {
+        b.textContent = "Ban User";
+        b.onclick = () => banUser(r.targetUser._id, r._id);
+      }
+
+      div.appendChild(b);
+    }
+
+    // MARK REVIEWED
+    if (r.status !== "reviewed" && r.status !== "action_taken") {
+      const b = document.createElement("button");
+      b.textContent = "Mark Reviewed";
+      b.onclick = () => resolve(r._id);
+      div.appendChild(b);
+    }
+
+    box.appendChild(div);
+  });
+}
+
+async function loadVerificationRequests() {
+  const res = await fetch(`${API}/verification/pending`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!res.ok) return;
+
+  const users = await res.json();
+users.sort(
+  (a, b) =>
+    new Date(a.verification && a.verification.updatedAt || 0) -
+    new Date(b.verification && b.verification.updatedAt || 0)
+);
+  const box = document.getElementById("verificationRequests");
+  box.innerHTML = "";
+
+  if (!users.length) {
+    box.innerHTML = "<div class='card'>No pending verification requests</div>";
+    return;
+  }
+
+  users.forEach(u => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    let actions = `
+  <button onclick="approveVerification('${u._id}', this)">Approve</button>
+  <button onclick="rejectVerification('${u._id}', this)">Reject</button>
+`;
+
+if (!u.verification.reviewedByModerator) {
+  actions += `<button onclick="markReviewed('${u._id}', this)">Mark as Read</button>`;
+}
+
+div.innerHTML = `
+  <b>${u.name}</b><br>
+  ${u.email}<br>
+  ${u.college}<br><br>
+
+  <button onclick="viewUser('${u.email}')">View Profile</button>
+
+  <div id="proof-${u._id}"></div>
+  ${actions}
+`;
+
+    const proofBox = div.querySelector(`#proof-${u._id}`);
+    (u.verification.proof || []).forEach(file => {
+      const img = document.createElement("img");
+      img.src = `/uploads/${file}`;
+      img.style.maxWidth = "200px";
+      img.style.display = "block";
+      img.style.marginTop = "8px";
+      proofBox.appendChild(img);
+    });
+
+    box.appendChild(div);
+  });
+}
+
+async function loadContactMessages() {
+  const res = await fetch(`${API}/contact/pending`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!res.ok) return;
+
+  const msgs = await res.json();
+  const box = document.getElementById("contactMessages");
+  box.innerHTML = "";
+
+  if (!msgs.length) {
+    box.innerHTML = "<div class='card'>No contact messages</div>";
+    return;
+  }
+
+  msgs.forEach(m => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML =
+  "<b>" + m.user.email + "</b><br>" +
+  "<b>Subject:</b> " + m.subject + "<br><br>" +
+  m.message + "<br><br>" +
+
+  "<textarea id='reply-" + m._id + "' " +
+  "style='width:100%;height:80px;padding:8px' " +
+  "placeholder='Reply to user'></textarea><br>" +
+
+"<button onclick=\"sendReply('" + m._id + "')\">Send Reply</button>" +
+"<button onclick=\"deleteContact('" + m._id + "')\">Delete</button>";
+    box.appendChild(div);
+  });
+}
+
+async function resolveContact(id) {
+  await fetch(`${API}/contact/resolve`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id })
+  });
+
+  loadContactMessages();
+}
+
+async function sendReply(id) {
+  const reply = document.getElementById(`reply-${id}`).value;
+  if (!reply) return alert("Reply required");
+
+  await fetch(`${API}/contact/reply`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id, reply })
+  });
+
+  loadContactMessages();
+}
+
+async function deleteContact(id) {
+  if (!confirm("Delete this contact message permanently?")) return;
+
+  await fetch(`${API}/contact/delete`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id })
+  });
+
+  loadContactMessages();
+}
+
+async function approveVerification(userId, btn) {
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  await fetch(`${API}/verification/approve?userId=${userId}`, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  loadVerificationRequests();
+}
+
+async function rejectVerification(userId, btn) {
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  await fetch(`${API}/verification/reject?userId=${userId}`, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  loadVerificationRequests();
+}
+async function markReviewed(userId, btn) {
+  btn.disabled = true;
+  btn.textContent = "Marked";
+
+  await fetch(`${API}/verification/mark-reviewed?userId=${userId}`, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  loadVerificationRequests();
+}
+async function resolve(id) {
+  await fetch(`${API}/reports/resolve`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ reportId: id })
+  });
+
+  loadReports();
+}
+
+async function deleteForum(postId, reportId) {
+  if (!confirm("Delete this forum post?")) return;
+
+  const res = await fetch(`${API}/moderator/forum/${postId}`, {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (res.ok) {
+   const btn = document.getElementById("delete-forum-" + reportId);
+if (btn) btn.remove();
+  }
+}
+
+
+async function deleteItem(itemId, reportId) {
+  if (!confirm("Delete this marketplace item?")) return;
+
+  const res = await fetch(`${API}/moderator/marketplace/item/${itemId}`, {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (res.ok) {
+    await fetch(`${API}/reports/resolve`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ reportId })
+    });
+
+    loadReports();
+  }
+}
+
+
+
+async function banUser(userId, reportId) {
+  if (!confirm("Ban this user?")) return;
+
+  const res = await fetch(`${API}/moderator/ban-user`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ userId })
+  });
+
+  if (res.ok) {
+  loadReports(); // re-render so Unban button appears
+}
+}
+
+async function unbanUser(userId) {
+  await fetch(`${API}/moderator/unban-user`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ userId })
+  });
+
+  loadReports(); 
+}
+
+function openTarget(type, id) {
+  if (type === "user") {
+  window.location.href = `/profile.html?email=${encodeURIComponent(id)}`;
+}
+
+  if (type === "forum") {
+    window.location.href = `/forum.html#post=${id}`;
+  }
+
+  if (type === "marketplace") {
+    window.location.href = `/marketplace.html#item=${id}`;
+  }
+}
+loadBannedUsers();
+loadReports();
+loadVerificationRequests();
+loadContactMessages();
+
+function viewUser(email) {
+  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+}
+
+// 🔁 POLLING — refresh reports every 5 seconds
+setInterval(() => {
+  loadBannedUsers();
+  loadReports();
+  loadVerificationRequests();
+loadContactMessages();
+}, 5000);
+// 🔍 IMAGE CLICK PREVIEW (MODERATOR)
+document.addEventListener("click", e => {
+  if (e.target.tagName === "IMG") {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imageModalImg");
+
+    modalImg.src = e.target.src;
+    modal.style.display = "flex";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("imageModal");
+  const closeBtn = document.getElementById("closeImageModal");
+
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+</script>
+<div id="imageModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+">
+
+  <span id="closeImageModal"
+        style="
+          position:absolute;
+          top:16px;
+          right:20px;
+          font-size:32px;
+          font-weight:bold;
+          color:white;
+          cursor:pointer;
+          z-index:10000;
+        ">&times;</span>
+
+  <img id="imageModalImg" style="
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+  ">
+</div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Friends • College Connect</title>
+
+  <style>
+    body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+display: flex;
+justify-content: center;
+
+}
+
+
+
+h2 {
+  font-size: 34px;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+}
+
+
+    button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+button.active {
+  background: #22c55e;
+  color: #000;
+  box-shadow: 0 8px 20px rgba(34,197,94,0.45);
+}
+
+    input {
+  padding: 10px 14px;
+  width: 260px;
+  border-radius: 8px;
+  border: 1px solid rgba(34,197,94,0.4);
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+}
+input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+}
+
+
+#send {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+justify-content: center;
+  margin-bottom: 20px;
+}
+
+
+
+    #controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+ justify-content: center;
+  margin-bottom: 24px;
+}
+
+
+    #output div {
+  background: #020617;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(34,197,94,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+#output {
+  margin-top: 10px;
+}
+
+
+
+    #output button {
+      margin-left: 10px;
+    }
+
+    /* 🔔 ADDED: highlight input when redirected */
+    .highlight {
+      border: 2px solid #4caf50;
+      background: #f0fff0;
+    }
+.page {
+  max-width: 720px;
+  width: 100%;
+  margin: 40px auto;
+  background: #111827;
+align-self: center;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+animation: fadeUp 0.5s ease-out;
+
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(34,197,94,0.4),
+    transparent
+  );
+  margin: 26px 0;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#output a,
+#output a:visited,
+#output a:active,
+#output a:focus {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+#output a:hover {
+  color: #9ca3af;
+  text-decoration: underline;
+}
+
+
+.page h2 {
+  text-align: center;
+  margin-top: -8px;
+}
+.friends-subheading {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 15px;
+  margin-top: -6px;
+  margin-bottom: 22px;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .friends-subheading {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+}
+
+
+@media (max-width: 640px) {
+  body {
+    align-items: flex-start;
+  }
+
+  .page {
+    margin-top: 24px;
+    align-self: stretch;
+  }
+}
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <h2><span style="color:#22c55e">Friends</span></h2>
+<div class="friends-subheading">
+  Connect with classmates, manage requests, and grow your circle
+</div>
+
+
+
+  <!-- ACTION BUTTONS -->
+  <div id="controls">
+  <button id="friendsBtn">Your Friends</button>
+  <button id="requestsBtn">Pending Requests</button>
+  <button id="blockedBtn">Blocked Users</button>
+</div>
+
+  <!-- SEND REQUEST -->
+  <div id="send">
+    <input
+      type="email"
+      id="emailInput"
+      placeholder="friend@college.edu"
+    >
+    <button id="sendBtn">Send Friend Request</button>
+  </div>
+
+  <hr>
+
+  <!-- OUTPUT -->
+  <div id="output"></div>
+</div>
+
+  <!-- SCRIPT (MUST BE LAST) -->
+  <script src="friends.js"></script>
+
+  <script>
+    /* 🔔 ADDED: handle redirect from notification */
+    const params = new URLSearchParams(window.location.search);
+    const redirectedUser = params.get("user");
+
+    if (redirectedUser) {
+      const input = document.getElementById("emailInput");
+      input.value = redirectedUser;
+      input.classList.add("highlight");
+
+      /* auto-load pending requests (friend notif context) */
+      const reqBtn = document.getElementById("requestsBtn");
+      if (reqBtn) reqBtn.click();
+
+      /* focus for clarity */
+      input.focus();
+    }
+  </script>
+
+</body>
+</html>

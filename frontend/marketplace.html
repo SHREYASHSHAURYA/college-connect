@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marketplace • College Connect</title>
+  <style>
+
+
+    /* GLOBAL */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PAGE */
+.page {
+  width: 100%;
+  max-width: 1000px;
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+/* HEADINGS */
+h1, h3 {
+  margin-top: 0;
+}
+.subheading {
+  text-align: left;
+  color: #9ca3af;
+  font-size: 16px;
+  margin-top: -6px;
+  margin-bottom: 28px;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .subheading {
+    font-size: 14px;
+    margin-bottom: 22px;
+    padding: 0 6px;
+  }
+}
+
+h1 span {
+  color: #22c55e;
+}
+
+/* INPUTS */
+input,
+select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(34,197,94,0.4);
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+}
+
+input[type="file"] {
+  padding: 6px;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+/* ITEM CARD */
+.item {
+  background: #020617;
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 18px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  word-break: break-word;
+}
+
+/* STATUS */
+.sold {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.reserved {
+  background: rgba(251,191,36,0.08);
+  border-color: rgba(251,191,36,0.5);
+}
+
+/* HIGHLIGHT */
+.highlight {
+  border: 2px solid #22c55e;
+  background: rgba(34,197,94,0.08);
+}
+
+/* COMMENTS */
+.comment {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(34,197,94,0.2);
+  font-size: 14px;
+}
+
+.reply {
+  margin-left: 32px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* COMMENT INPUTS */
+.item input {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* 🔽 Smaller buttons ONLY inside comments & replies */
+.comment button,
+.reply button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+@media (max-width: 640px) {
+  input,
+  select,
+  button {
+    width: 100%;
+  }
+
+  button {
+    margin-top: 8px;
+  }
+}
+@media (max-width: 640px) {
+  .reply {
+    margin-left: 0;
+    padding-left: 12px;
+    border-left: 2px solid rgba(34,197,94,0.3);
+  }
+}
+.item img {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 640px) {
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="page">
+<h1 style="color:#22c55e;">Marketplace</h1>
+
+<p class="subheading">
+  Sell or find useful books, notes, and essentials from your campus
+</p>
+
+<h3>Add Item</h3>
+<input id="title" placeholder="Title (required)">
+<select id="type">
+  <option value="book">Book</option>
+  <option value="notes">Notes</option>
+  <option value="pyq">PYQ</option>
+  <option value="item">Item</option>
+</select>
+<input id="price" type="number" placeholder="Price (required)" min="0">
+<input id="description" placeholder="Description (optional)">
+<input type="file" id="itemImages" accept="image/*" multiple>
+<br>
+<small>Max 3 images</small>
+<br>
+<button onclick="addItem()">Add Item</button>
+
+<hr>
+
+<h3>Items</h3>
+<input id="search" placeholder="Search title (optional)">
+<select id="filterType">
+  <option value="">All</option>
+  <option value="book">Book</option>
+  <option value="notes">Notes</option>
+  <option value="pyq">PYQ</option>
+  <option value="item">Item</option>
+</select>
+<label>
+  <input type="checkbox" id="availableOnly"> Available only
+</label>
+<button onclick="applyFilters()">Apply</button>
+
+<hr>
+
+<div id="items"></div>
+
+<script>
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.clear();
+    alert("Your account has been banned or logged out.");
+    window.location.href = "login.html";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
+}
+
+const email = localStorage.getItem("email");
+const payload = JSON.parse(atob(token.split(".")[1]));
+const isModerator = payload.role === "moderator" || payload.role === "admin";
+function avatarHTML(user, size = 28) {
+  const img = user.profilePic
+  ? `${API}/uploads/${user.profilePic}`
+  : `${API}/uploads/default-avatar.png`;
+
+  return `
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-height:${size}px;
+    ">
+      <img
+        src="${img}"
+        onerror="this.src='${API}/uploads/default-avatar.png'"
+        style="
+          width:${size}px;
+          height:${size}px;
+          border-radius:50%;
+          object-fit:cover;
+          flex-shrink:0;
+        "
+      >
+      <div style="
+        line-height:1.2;
+        white-space:nowrap;
+      ">
+        ${user.name || user.email}
+      </div>
+    </div>
+  `;
+}
+let ALL_ITEMS = [];
+let filtersActive = false;
+
+
+function headers() {
+  return { Authorization: "Bearer " + token };
+}
+
+/* ================= ITEMS ================= */
+
+async function addItem() {
+  const title = titleEl().value.trim();
+const type = typeEl().value;
+const price = Number(priceEl().value);
+const description = descEl().value.trim();
+  const files = document.getElementById("itemImages").files;
+
+if (price < 0) {
+  alert("Price cannot be negative");
+  return;
+}
+
+
+  if (!title || !price) {
+    alert("Title and price required");
+    return;
+  }
+
+  if (files.length > 3) {
+    alert("Maximum 3 images allowed");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("title", title);
+  fd.append("type", type);
+  fd.append("price", price);
+  fd.append("description", description);
+
+  for (let f of files) {
+    fd.append("images", f);
+  }
+
+  await authFetch(`${API}/add-item`, {
+  method: "POST",
+  body: fd
+});
+
+  document.getElementById("itemImages").value = "";
+  loadItems();
+}
+async function loadItems() {
+  const res = await authFetch(`${API}/items`);
+  ALL_ITEMS = await res.json();
+  if (
+  !search.value &&
+  !filterType.value &&
+  !availableOnly.checked
+) {
+  filtersActive = false;
+}
+
+if (filtersActive) {
+  applyFilters();
+} else {
+  renderItems(ALL_ITEMS);
+}
+
+}
+
+function applyFilters() {
+filtersActive = true;
+  const q = search.value.toLowerCase();
+  const type = filterType.value;
+  const available = availableOnly.checked;
+
+  renderItems(
+    ALL_ITEMS.filter(i =>
+      (!q || i.title.toLowerCase().includes(q)) &&
+      (!type || i.type === type) &&
+      (!available || !i.isSold)
+    )
+  );
+}
+
+function renderItems(items) {
+  const box = document.getElementById("items");
+  box.innerHTML = "";
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+div.id = `item-${item._id}`;
+div.className =
+  "item" +
+  (item.status === "SOLD" ? " sold" : "") +
+  (item.status === "RESERVED" ? " reserved" : "");
+
+    div.innerHTML = `
+      <b>${item.title}</b><br>
+      Type: ${item.type}<br>
+      Price: ₹${item.price}<br>
+      <div style="
+  display:flex;
+  align-items:center;
+  gap:8px;
+">
+  <span>Seller:</span>
+  <span onclick="openProfile('${item.seller.email}')"
+        style="cursor:pointer;">
+    ${avatarHTML(item.seller)}
+  </span>
+</div><br>
+      Status: ${item.status}<br>
+${
+  !isModerator &&
+  item.seller.email !== email &&
+  item.seller.role !== "moderator" &&
+  item.seller.role !== "admin"
+    ? `<button onclick="reportItem('${item._id}')">Report</button>`
+    : ``
+}
+      ${item.description || ""}
+${
+  (item.images || []).map(img =>
+    `<img src="${API}/uploads/${img}"
+          onerror="this.style.display='none'"
+          style="max-width:200px;display:block;margin:6px 0;border-radius:6px">`
+  ).join("")
+}
+      <hr>
+      <b>Comments</b>
+    `;
+
+    /* COMMENTS */
+    item.comments.forEach(c => {
+      const cdiv = document.createElement("div");
+      cdiv.className = "comment";
+      cdiv.innerHTML = `
+  <div style="display:flex;align-items:center;gap:6px;">
+  <span onclick="openProfile('${c.user.email}')"
+        style="cursor:pointer;">
+    ${avatarHTML(c.user, 24)}
+  </span>
+  <span>:</span>
+  <span>${c.text}</span>
+</div>
+`;
+
+// 🔥 MODERATOR DELETE COMMENT
+if (isModerator) {
+  const delCommentBtn = document.createElement("button");
+  delCommentBtn.textContent = "Delete";
+  delCommentBtn.onclick = async () => {
+    await authFetch(
+  `${API}/moderator/marketplace/comment/${item._id}/${c._id}`,
+  { method: "DELETE" }
+);
+    loadItems();
+  };
+  cdiv.appendChild(delCommentBtn);
+}
+
+      /* REPLIES */
+      c.replies.forEach(r => {
+        const rdiv = document.createElement("div");
+        rdiv.className = "reply";
+        rdiv.innerHTML = `
+  <div style="display:flex;align-items:center;gap:6px;">
+  <span onclick="openProfile('${r.user.email}')"
+        style="cursor:pointer;">
+    ${avatarHTML(r.user, 22)}
+  </span>
+  <span>:</span>
+  <span>${r.text}</span>
+</div>
+`;
+// 🔥 MODERATOR DELETE REPLY
+if (isModerator) {
+  const delReplyBtn = document.createElement("button");
+  delReplyBtn.textContent = "Delete";
+  delReplyBtn.onclick = async () => {
+    await authFetch(
+  `${API}/moderator/marketplace/reply/${item._id}/${c._id}/${r._id}`,
+  { method: "DELETE" }
+);
+    loadItems();
+  };
+  rdiv.appendChild(delReplyBtn);
+}
+        cdiv.appendChild(rdiv);
+      });
+
+      /* reply box */
+      const replyInput = document.createElement("input");
+      replyInput.placeholder = "Reply…";
+      replyInput.style.marginLeft = "10px";
+
+      const replyBtn = document.createElement("button");
+      replyBtn.textContent = "Reply";
+      replyBtn.onclick = async () => {
+        if (!replyInput.value.trim()) return;
+
+        await authFetch(`${API}/reply-item-comment`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    itemId: item._id,
+    commentId: c._id,
+    text: replyInput.value
+  })
+});
+
+        loadItems();
+      };
+
+      cdiv.appendChild(replyInput);
+      cdiv.appendChild(replyBtn);
+      div.appendChild(cdiv);
+    });
+
+    /* ADD COMMENT */
+    const input = document.createElement("input");
+    input.placeholder = "Write a comment";
+
+    const btn = document.createElement("button");
+    btn.textContent = "Post";
+    btn.onclick = async () => {
+      if (!input.value.trim()) return;
+
+      await authFetch(`${API}/add-item-comment`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ itemId: item._id, text: input.value })
+});
+
+      loadItems();
+    };
+
+    div.appendChild(input);
+    div.appendChild(btn);
+
+    /* SELLER ACTIONS */
+    if (item.seller.email === email) {
+
+  if (item.status === "AVAILABLE") {
+    const reserveBtn = document.createElement("button");
+    reserveBtn.textContent = "Reserve";
+   reserveBtn.onclick = async () => {
+  await authFetch(`${API}/reserve-item?id=${item._id}`);
+  loadItems();
+};
+    div.appendChild(reserveBtn);
+  }
+
+  if (item.status === "RESERVED") {
+  const soldBtn = document.createElement("button");
+  soldBtn.textContent = "Mark Sold";
+  soldBtn.onclick = async () => {
+    await authFetch(`${API}/marketplace/mark-sold?id=${item._id}`);
+    loadItems();
+  };
+
+  const unreserveBtn = document.createElement("button");
+  unreserveBtn.textContent = "Unreserve";
+  unreserveBtn.onclick = async () => {
+    await authFetch(`${API}/unreserve-item?id=${item._id}`);
+    loadItems();
+  };
+
+  div.appendChild(soldBtn);
+  div.appendChild(unreserveBtn);
+}
+}
+
+    if (item.seller.email === email || isModerator) {
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Delete";
+      delBtn.onclick = async () => {
+  const url = isModerator
+    ? `${API}/moderator/marketplace/item/${item._id}`
+    : `${API}/delete-item?id=${item._id}`;
+
+  await authFetch(url, {
+  method: isModerator ? "DELETE" : "GET"
+});
+
+  loadItems();
+};
+      div.appendChild(delBtn);
+    }
+
+    box.appendChild(div);
+  });
+}
+
+/* HELPERS */
+const titleEl = () => document.getElementById("title");
+const typeEl = () => document.getElementById("type");
+const priceEl = () => document.getElementById("price");
+const descEl = () => document.getElementById("description");
+loadItems();
+
+// 🔁 POLLING
+setInterval(() => {
+  loadItems();
+}, 5000);
+
+// ================= REDIRECT FROM NOTIFICATION =================
+const hash = window.location.hash;
+
+if (hash.startsWith("#item=")) {
+  const targetId = hash.replace("#item=", "");
+
+  setTimeout(() => {
+    const el = document.getElementById(`item-${targetId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("highlight");
+
+      setTimeout(() => {
+        el.classList.remove("highlight");
+      }, 3000);
+    }
+  }, 600);
+}
+function openProfile(email) {
+  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+}
+
+async function reportItem(itemId) {
+  if (payload.role !== "user") return;
+  const reason = prompt("Why are you reporting this item?");
+  if (!reason) return;
+
+  await authFetch(`${API}/report`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    targetType: "marketplace",
+    targetId: itemId,
+    reason
+  })
+});
+
+  alert("Report submitted");
+}
+// 🔍 IMAGE CLICK PREVIEW — MARKETPLACE ONLY
+document.addEventListener("click", e => {
+  if (e.target.tagName === "IMG" && e.target.closest(".item")) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imageModalImg");
+
+    modalImg.src = e.target.src;
+    modal.style.display = "flex";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ❌ CLOSE BUTTON
+  const closeBtn = document.getElementById("closeImageModal");
+  const modal = document.getElementById("imageModal");
+
+  if (closeBtn && modal) {
+    closeBtn.onclick = (e) => {
+      e.stopPropagation();
+      modal.style.display = "none";
+    };
+
+    // CLICKING BACKDROP CLOSES
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  }
+
+});
+</script>
+ </div>
+<div id="imageModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+">
+
+  <!-- ❌ CLOSE BUTTON -->
+  <span id="closeImageModal" style="
+    position:absolute;
+    top:16px;
+    right:20px;
+    font-size:32px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    z-index:10000;
+  ">&times;</span>
+
+  <img id="imageModalImg" style="
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+  ">
+</div>
+</body>
+</html>

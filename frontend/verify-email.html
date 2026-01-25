@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Email Verification • College Connect</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #e5e7eb;
+      background:
+        radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+        radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+        linear-gradient(180deg, #020617, #000000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 14px;
+      padding: 32px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+
+    h2 {
+      color: #22c55e;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #9ca3af;
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: #22c55e;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Email Verification</h2>
+  <p id="status">Verifying your email…</p>
+</div>
+
+<script>
+  const API =
+    location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://YOUR_API_DOMAIN";
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  const statusEl = document.getElementById("status");
+
+  if (!token) {
+    statusEl.textContent = "Invalid verification link.";
+    statusEl.className = "error";
+    throw new Error("Missing token");
+  }
+
+  fetch(`${API}/verify-email?token=${token}`)
+    .then(res => res.text())
+    .then(msg => {
+      statusEl.innerHTML = `
+        ${msg}<br><br>
+        <a href="/login.html">Go to Login</a>
+      `;
+      statusEl.style.color = "#22c55e";
+    })
+    .catch(() => {
+      statusEl.textContent = "Verification failed. Link may be expired.";
+      statusEl.className = "error";
+    });
+</script>
+
+</body>
+</html>

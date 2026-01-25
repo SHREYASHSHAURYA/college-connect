@@ -1,0 +1,969 @@
+[
+  {
+    "id": "IISc",
+    "name": "Indian Institute of Science, Bangalore",
+    "domains": ["iisc.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITB",
+    "name": "Indian Institute of Technology Bombay",
+    "domains": ["iitb.ac.in", "students.iitb.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITD",
+    "name": "Indian Institute of Technology Delhi",
+    "domains": ["iitd.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITM",
+    "name": "Indian Institute of Technology Madras",
+    "domains": ["iitm.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITK",
+    "name": "Indian Institute of Technology Kanpur",
+    "domains": ["iitk.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITKGP",
+    "name": "Indian Institute of Technology Kharagpur",
+    "domains": ["iitkgp.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITR",
+    "name": "Indian Institute of Technology Roorkee",
+    "domains": ["iitr.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITG",
+    "name": "Indian Institute of Technology Guwahati",
+    "domains": ["iitg.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITH",
+    "name": "Indian Institute of Technology Hyderabad",
+    "domains": ["iith.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITBHU",
+    "name": "Indian Institute of Technology (BHU) Varanasi",
+    "domains": ["iitbhu.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITGN",
+    "name": "Indian Institute of Technology Gandhinagar",
+    "domains": ["iitgn.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITP",
+    "name": "Indian Institute of Technology Patna",
+    "domains": ["iitp.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITJ",
+    "name": "Indian Institute of Technology Jodhpur",
+    "domains": ["iitj.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITRPR",
+    "name": "Indian Institute of Technology Ropar",
+    "domains": ["iitrpr.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITMandi",
+    "name": "Indian Institute of Technology Mandi",
+    "domains": ["iitmandi.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITIndore",
+    "name": "Indian Institute of Technology Indore",
+    "domains": ["iiti.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITBBS",
+    "name": "Indian Institute of Technology Bhubaneswar",
+    "domains": ["iitbbs.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITTP",
+    "name": "Indian Institute of Technology Tirupati",
+    "domains": ["iittp.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITPalakkad",
+    "name": "Indian Institute of Technology Palakkad",
+    "domains": ["iitpkd.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IITDH",
+    "name": "Indian Institute of Technology Dharwad",
+    "domains": ["iitdh.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "NITTR",
+    "name": "National Institute of Technology Tiruchirappalli",
+    "domains": ["nitt.edu"],
+    "status": "active"
+  },
+  {
+    "id": "NITS",
+    "name": "National Institute of Technology Surathkal",
+    "domains": ["nitk.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITW",
+    "name": "National Institute of Technology Warangal",
+    "domains": ["nitw.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITC",
+    "name": "National Institute of Technology Calicut",
+    "domains": ["nitc.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITR",
+    "name": "National Institute of Technology Rourkela",
+    "domains": ["nitrkl.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITD",
+    "name": "National Institute of Technology Durgapur",
+    "domains": ["nitdgp.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITA",
+    "name": "National Institute of Technology Agartala",
+    "domains": ["nita.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITJ",
+    "name": "National Institute of Technology Jalandhar",
+    "domains": ["nitj.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITP",
+    "name": "National Institute of Technology Patna",
+    "domains": ["nitp.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITRR",
+    "name": "National Institute of Technology Raipur",
+    "domains": ["nitrr.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITSR",
+    "name": "National Institute of Technology Silchar",
+    "domains": ["nits.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITKUR",
+    "name": "National Institute of Technology Kurukshetra",
+    "domains": ["nitkkr.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITJSR",
+    "name": "National Institute of Technology Jamshedpur",
+    "domains": ["nitjsr.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITAP",
+    "name": "National Institute of Technology Arunachal Pradesh",
+    "domains": ["nitap.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITGOA",
+    "name": "National Institute of Technology Goa",
+    "domains": ["nitgoa.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITMEGH",
+    "name": "National Institute of Technology Meghalaya",
+    "domains": ["nitm.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITMZ",
+    "name": "National Institute of Technology Mizoram",
+    "domains": ["nitmz.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITNAG",
+    "name": "National Institute of Technology Nagaland",
+    "domains": ["nitnagaland.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITPUD",
+    "name": "National Institute of Technology Puducherry",
+    "domains": ["nitpy.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITSIK",
+    "name": "National Institute of Technology Sikkim",
+    "domains": ["nitsikkim.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NITUK",
+    "name": "National Institute of Technology Uttarakhand",
+    "domains": ["nituk.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "IIITH",
+    "name": "International Institute of Information Technology Hyderabad",
+    "domains": ["iiit.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITB",
+    "name": "International Institute of Information Technology Bangalore",
+    "domains": ["iiitb.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITD",
+    "name": "Indraprastha Institute of Information Technology Delhi",
+    "domains": ["iiitd.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITA",
+    "name": "Indian Institute of Information Technology Allahabad",
+    "domains": ["iiita.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITG",
+    "name": "Indian Institute of Information Technology Guwahati",
+    "domains": ["iiitg.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITDMK",
+    "name": "Indian Institute of Information Technology Design & Manufacturing Kancheepuram",
+    "domains": ["iiitdm.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITDMJ",
+    "name": "Indian Institute of Information Technology Design & Manufacturing Jabalpur",
+    "domains": ["iiitdmj.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITK",
+    "name": "Indian Institute of Information Technology Kottayam",
+    "domains": ["iiitkottayam.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITN",
+    "name": "Indian Institute of Information Technology Nagpur",
+    "domains": ["iiitn.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITR",
+    "name": "Indian Institute of Information Technology Ranchi",
+    "domains": ["iiitranchi.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITS",
+    "name": "Indian Institute of Information Technology Sri City",
+    "domains": ["iiits.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITV",
+    "name": "Indian Institute of Information Technology Vadodara",
+    "domains": ["iiitvadodara.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITKAL",
+    "name": "Indian Institute of Information Technology Kalyani",
+    "domains": ["iiitkalyani.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITBH",
+    "name": "Indian Institute of Information Technology Bhagalpur",
+    "domains": ["iiitbh.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITBGP",
+    "name": "Indian Institute of Information Technology Bhopal",
+    "domains": ["iiitbhopal.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITUNA",
+    "name": "Indian Institute of Information Technology Una",
+    "domains": ["iiituna.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIITAG",
+    "name": "Indian Institute of Information Technology Agartala",
+    "domains": ["iiitagartala.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "DU",
+    "name": "University of Delhi",
+    "domains": ["du.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "JNU",
+    "name": "Jawaharlal Nehru University",
+    "domains": ["jnu.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "BHU",
+    "name": "Banaras Hindu University",
+    "domains": ["bhu.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "AMU",
+    "name": "Aligarh Muslim University",
+    "domains": ["amu.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "UOH",
+    "name": "University of Hyderabad",
+    "domains": ["uohyd.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "JMI",
+    "name": "Jamia Millia Islamia",
+    "domains": ["jmi.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "CU",
+    "name": "University of Calcutta",
+    "domains": ["caluniv.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "MU",
+    "name": "University of Mumbai",
+    "domains": ["mu.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "PU",
+    "name": "University of Pune (Savitribai Phule Pune University)",
+    "domains": ["unipune.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "AU",
+    "name": "Anna University",
+    "domains": ["annauniv.edu"],
+    "status": "active"
+  },
+  {
+    "id": "OU",
+    "name": "Osmania University",
+    "domains": ["osmania.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "MSU",
+    "name": "The Maharaja Sayajirao University of Baroda",
+    "domains": ["msubaroda.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "CUJ",
+    "name": "Central University of Jharkhand",
+    "domains": ["cuj.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "CUH",
+    "name": "Central University of Haryana",
+    "domains": ["cuh.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "CUG",
+    "name": "Central University of Gujarat",
+    "domains": ["cug.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "IISERP",
+    "name": "Indian Institute of Science Education and Research Pune",
+    "domains": ["iiserpune.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IISERK",
+    "name": "Indian Institute of Science Education and Research Kolkata",
+    "domains": ["iiserkol.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IISERB",
+    "name": "Indian Institute of Science Education and Research Bhopal",
+    "domains": ["iiserb.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IISERTVM",
+    "name": "Indian Institute of Science Education and Research Thiruvananthapuram",
+    "domains": ["iisertvm.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IISERT",
+    "name": "Indian Institute of Science Education and Research Tirupati",
+    "domains": ["iisertirupati.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IISERBPR",
+    "name": "Indian Institute of Science Education and Research Berhampur",
+    "domains": ["iiserbpr.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "ISI",
+    "name": "Indian Statistical Institute",
+    "domains": ["isical.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "TISS",
+    "name": "Tata Institute of Social Sciences",
+    "domains": ["tiss.edu"],
+    "status": "active"
+  },
+  {
+    "id": "HBNI",
+    "name": "Homi Bhabha National Institute",
+    "domains": ["hbni.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIFT",
+    "name": "Indian Institute of Foreign Trade",
+    "domains": ["iift.edu"],
+    "status": "active"
+  },
+  {
+    "id": "NLSIU",
+    "name": "National Law School of India University",
+    "domains": ["nls.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NALSAR",
+    "name": "NALSAR University of Law",
+    "domains": ["nalsar.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NLUD",
+    "name": "National Law University Delhi",
+    "domains": ["nludelhi.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIMB",
+    "name": "Indian Institute of Management Bangalore",
+    "domains": ["iimb.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIMA",
+    "name": "Indian Institute of Management Ahmedabad",
+    "domains": ["iima.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "IIMC",
+    "name": "Indian Institute of Management Calcutta",
+    "domains": ["iimcal.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "RVCE",
+    "name": "R V College of Engineering",
+    "domains": ["rvce.edu.in"],
+    "status": "active"
+  },
+  {
+    "id": "MSRIT",
+    "name": "Ramaiah Institute of Technology",
+    "domains": ["msrit.edu"],
+    "status": "active"
+  },
+  {
+    "id": "BMSCE",
+    "name": "BMS College of Engineering",
+    "domains": ["bmsce.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "DSCE",
+    "name": "Dayananda Sagar College of Engineering",
+    "domains": ["dayanandasagar.edu"],
+    "status": "active"
+  },
+  {
+    "id": "NIE",
+    "name": "The National Institute of Engineering, Mysuru",
+    "domains": ["nie.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "SJCE",
+    "name": "JSS Science and Technology University (SJCE)",
+    "domains": ["jssstuniv.in"],
+    "status": "active"
+  },
+  {
+    "id": "BIT",
+    "name": "Bangalore Institute of Technology",
+    "domains": ["bit-bangalore.edu.in"],
+    "status": "active"
+  },
+  {
+    "id": "AIT",
+    "name": "Acharya Institute of Technology",
+    "domains": ["acharya.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "PESCE",
+    "name": "PES College of Engineering, Mandya",
+    "domains": ["pesce.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "MITM",
+    "name": "Malnad College of Engineering",
+    "domains": ["mcehassan.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "SDMCE",
+    "name": "SDM College of Engineering and Technology",
+    "domains": ["sdmcet.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "KLE",
+    "name": "KLE Technological University",
+    "domains": ["kletech.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "NMAMIT",
+    "name": "NMAM Institute of Technology",
+    "domains": ["nmamit.nitte.edu.in"],
+    "status": "active"
+  },
+  {
+    "id": "BITSP",
+    "name": "Birla Institute of Technology and Science, Pilani",
+    "domains": ["bits-pilani.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "BITSGoa",
+    "name": "Birla Institute of Technology and Science, Goa",
+    "domains": ["goa.bits-pilani.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "BITSH",
+    "name": "Birla Institute of Technology and Science, Hyderabad",
+    "domains": ["hyderabad.bits-pilani.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "VIT",
+    "name": "Vellore Institute of Technology",
+    "domains": ["vit.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "VITC",
+    "name": "Vellore Institute of Technology, Chennai",
+    "domains": ["vit.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "VITAP",
+    "name": "Vellore Institute of Technology, Andhra Pradesh",
+    "domains": ["vitap.ac.in"],
+    "status": "active"
+  },
+  {
+    "id": "VITB",
+    "name": "Vellore Institute of Technology, Bhopal",
+    "domains": ["vitbhopal.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "SRM",
+    "name": "SRM Institute of Science and Technology",
+    "domains": ["srmist.edu.in"],
+    "status": "active"
+  },
+  {
+    "id": "SRMAP",
+    "name": "SRM University, Andhra Pradesh",
+    "domains": ["srmap.edu.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "MIT",
+    "name": "Manipal Institute of Technology",
+    "domains": ["manipal.edu"],
+    "status": "active"
+  },
+  {
+    "id": "MUJ",
+    "name": "Manipal University Jaipur",
+    "domains": ["jaipur.manipal.edu"],
+    "status": "active"
+  },
+
+  {
+    "id": "AMRITA",
+    "name": "Amrita Vishwa Vidyapeetham",
+    "domains": ["amrita.edu"],
+    "status": "active"
+  },
+
+  {
+    "id": "KIIT",
+    "name": "Kalinga Institute of Industrial Technology",
+    "domains": ["kiit.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "SHIVNADAR",
+    "name": "Shiv Nadar University",
+    "domains": ["snu.edu.in"],
+    "status": "active"
+  },
+  {
+    "id": "ASHOKA",
+    "name": "Ashoka University",
+    "domains": ["ashoka.edu.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "NMIMS",
+    "name": "Narsee Monjee Institute of Management Studies",
+    "domains": ["nmims.edu"],
+    "status": "active"
+  },
+
+  {
+    "id": "SYMBIOSIS",
+    "name": "Symbiosis International University",
+    "domains": ["siu.edu.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "UPES",
+    "name": "University of Petroleum and Energy Studies",
+    "domains": ["upes.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "LPU",
+    "name": "Lovely Professional University",
+    "domains": ["lpu.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "CHITKARA",
+    "name": "Chitkara University",
+    "domains": ["chitkara.edu.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "JAIN",
+    "name": "Jain University",
+    "domains": ["jainuniversity.ac.in"],
+    "status": "active"
+  },
+
+  {
+    "id": "SASTRA",
+    "name": "SASTRA Deemed University",
+    "domains": ["sastra.edu"],
+    "status": "active"
+  },
+  {
+    "id": "MIT",
+    "name": "Massachusetts Institute of Technology",
+    "domains": ["mit.edu"],
+    "status": "active"
+  },
+  {
+    "id": "STANFORD",
+    "name": "Stanford University",
+    "domains": ["stanford.edu"],
+    "status": "active"
+  },
+  {
+    "id": "HARVARD",
+    "name": "Harvard University",
+    "domains": ["harvard.edu"],
+    "status": "active"
+  },
+  {
+    "id": "CALTECH",
+    "name": "California Institute of Technology",
+    "domains": ["caltech.edu"],
+    "status": "active"
+  },
+  {
+    "id": "BERKELEY",
+    "name": "University of California, Berkeley",
+    "domains": ["berkeley.edu"],
+    "status": "active"
+  },
+  {
+    "id": "UCLA",
+    "name": "University of California, Los Angeles",
+    "domains": ["ucla.edu"],
+    "status": "active"
+  },
+  {
+    "id": "CMU",
+    "name": "Carnegie Mellon University",
+    "domains": ["cmu.edu"],
+    "status": "active"
+  },
+  {
+    "id": "PRINCETON",
+    "name": "Princeton University",
+    "domains": ["princeton.edu"],
+    "status": "active"
+  },
+  {
+    "id": "YALE",
+    "name": "Yale University",
+    "domains": ["yale.edu"],
+    "status": "active"
+  },
+  {
+    "id": "COLUMBIA",
+    "name": "Columbia University",
+    "domains": ["columbia.edu"],
+    "status": "active"
+  },
+
+  {
+    "id": "OXFORD",
+    "name": "University of Oxford",
+    "domains": ["ox.ac.uk"],
+    "status": "active"
+  },
+  {
+    "id": "CAMBRIDGE",
+    "name": "University of Cambridge",
+    "domains": ["cam.ac.uk"],
+    "status": "active"
+  },
+  {
+    "id": "IMPERIAL",
+    "name": "Imperial College London",
+    "domains": ["imperial.ac.uk"],
+    "status": "active"
+  },
+  {
+    "id": "UCL",
+    "name": "University College London",
+    "domains": ["ucl.ac.uk"],
+    "status": "active"
+  },
+  {
+    "id": "KCL",
+    "name": "King’s College London",
+    "domains": ["kcl.ac.uk"],
+    "status": "active"
+  },
+  {
+    "id": "EDINBURGH",
+    "name": "University of Edinburgh",
+    "domains": ["ed.ac.uk"],
+    "status": "active"
+  },
+
+  {
+    "id": "ETHZ",
+    "name": "ETH Zurich",
+    "domains": ["ethz.ch"],
+    "status": "active"
+  },
+  {
+    "id": "EPFL",
+    "name": "École Polytechnique Fédérale de Lausanne",
+    "domains": ["epfl.ch"],
+    "status": "active"
+  },
+
+  {
+    "id": "TUM",
+    "name": "Technical University of Munich",
+    "domains": ["tum.de"],
+    "status": "active"
+  },
+  {
+    "id": "LMU",
+    "name": "Ludwig Maximilian University of Munich",
+    "domains": ["lmu.de"],
+    "status": "active"
+  },
+
+  {
+    "id": "TORONTO",
+    "name": "University of Toronto",
+    "domains": ["utoronto.ca"],
+    "status": "active"
+  },
+  {
+    "id": "UBC",
+    "name": "University of British Columbia",
+    "domains": ["ubc.ca"],
+    "status": "active"
+  },
+  {
+    "id": "MCGILL",
+    "name": "McGill University",
+    "domains": ["mcgill.ca"],
+    "status": "active"
+  },
+
+  {
+    "id": "NUS",
+    "name": "National University of Singapore",
+    "domains": ["nus.edu.sg"],
+    "status": "active"
+  },
+  {
+    "id": "NTU",
+    "name": "Nanyang Technological University",
+    "domains": ["ntu.edu.sg"],
+    "status": "active"
+  },
+
+  {
+    "id": "TSINGHUA",
+    "name": "Tsinghua University",
+    "domains": ["tsinghua.edu.cn"],
+    "status": "active"
+  },
+  {
+    "id": "PEKING",
+    "name": "Peking University",
+    "domains": ["pku.edu.cn"],
+    "status": "active"
+  },
+
+  {
+    "id": "TOKYO",
+    "name": "University of Tokyo",
+    "domains": ["u-tokyo.ac.jp"],
+    "status": "active"
+  },
+  {
+    "id": "KYOTO",
+    "name": "Kyoto University",
+    "domains": ["kyoto-u.ac.jp"],
+    "status": "active"
+  },
+
+  {
+    "id": "UNSW",
+    "name": "University of New South Wales",
+    "domains": ["unsw.edu.au"],
+    "status": "active"
+  },
+  {
+    "id": "MELBOURNE",
+    "name": "University of Melbourne",
+    "domains": ["unimelb.edu.au"],
+    "status": "active"
+  },
+  {
+    "id": "SYDNEY",
+    "name": "University of Sydney",
+    "domains": ["sydney.edu.au"],
+    "status": "active"
+  },
+  {
+  "code": "MYCOLLEGE",
+  "name": "My College",
+  "domains": ["college.edu"],
+  "status": "active"
+  }
+]

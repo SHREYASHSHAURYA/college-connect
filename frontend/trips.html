@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trips • College Connect</title>
+  <style>
+  body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PAGE CONTAINER */
+.page {
+  width: 100%;
+  max-width: 900px;
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+/* HEADINGS */
+h1, h3 {
+  margin-top: 0;
+  color: #e5e7eb;
+}
+
+h1 span {
+  color: #22c55e;
+}
+
+.subheading {
+  color: #9ca3af;
+  font-size: 16px;
+  margin-top: 6px;
+  margin-bottom: 28px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .subheading {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+}
+
+
+/* INPUTS */
+input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(34,197,94,0.4);
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+}
+
+input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+/* TRIP CARD */
+.trip {
+  background: #020617;
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+/* REQUESTS */
+.req {
+  margin-left: 16px;
+  font-size: 14px;
+}
+
+/* FULL BADGE */
+.full {
+  color: #f87171;
+  font-weight: bold;
+}
+
+/* HIGHLIGHTED TRIP */
+.highlight {
+  border: 2px solid #22c55e;
+  background: rgba(34,197,94,0.08);
+}
+
+@media (max-width: 640px) {
+
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+
+  .page {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  input,
+  button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  h1, h3 {
+    text-align: center;
+  }
+
+  /* Search section stacking */
+  #searchFrom,
+  #searchTo {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1><span>Trips</span></h1>
+<div class="subheading">
+  Share rides, split costs, and travel together safely
+</div>
+
+<h3>Create Trip</h3>
+<input id="from" placeholder="From"><br><br>
+<input id="to" placeholder="To"><br><br>
+
+<label>Trip Date & Time</label><br>
+<input id="dateTime" type="datetime-local"><br><br>
+
+<label>Valid Till (optional)</label><br>
+<input id="validTill" type="datetime-local"><br><br>
+
+<input id="passengerLimit" type="number" min="1" placeholder="Passenger Limit"><br><br>
+
+<button onclick="createTrip()">Create Trip</button>
+
+<hr>
+
+<h3>Search Trips</h3>
+<input id="searchFrom" placeholder="From (optional)">
+<input id="searchTo" placeholder="To (optional)">
+<button onclick="loadTrips()">Search</button>
+
+<hr>
+
+<h3>Trips</h3>
+<div id="trips"></div>
+
+<script>
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+const email = localStorage.getItem("email");
+
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.clear();
+    alert("Your account has been banned or logged out.");
+    window.location.href = "login.html";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
+}
+
+function avatarHTML(user, size = 28) {
+  const img = user.profilePic
+    ? `${API}/uploads/${user.profilePic}`
+    : `${API}/uploads/default-avatar.png`;
+
+  return `
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-height:${size}px;
+    ">
+      <img
+        src="${img}"
+        style="
+          width:${size}px;
+          height:${size}px;
+          border-radius:50%;
+          object-fit:cover;
+          flex-shrink:0;
+        "
+      >
+      <div style="
+        line-height:1.2;
+        white-space:nowrap;
+      ">
+        ${user.name || user.email}
+      </div>
+    </div>
+  `;
+}
+
+function headers() {
+  return { Authorization: "Bearer " + token };
+}
+
+/* CREATE TRIP */
+async function createTrip() {
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+  const dateTime = new Date(document.getElementById("dateTime").value).toISOString();
+  let validTill = document.getElementById("validTill").value;
+  const passengerLimit = document.getElementById("passengerLimit").value;
+
+  if (!from || !to || !dateTime || !passengerLimit) {
+    alert("From, To, Trip Time and Passenger Limit required");
+    return;
+  }
+
+  if (new Date(dateTime) < new Date()) {
+    alert("Trip cannot be in the past");
+    return;
+  }
+// ✅ validTill must be AFTER trip time (if provided)
+if (validTill && new Date(validTill) <= new Date(dateTime)) {
+  alert("Valid Till must be after Trip Time");
+  return;
+}
+
+  if (!validTill) {
+    validTill = new Date(
+      new Date(dateTime).getTime() + 24 * 60 * 60 * 1000
+    ).toISOString();
+  }
+
+  await authFetch(
+  `${API}/create-trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&dateTime=${dateTime}&validTill=${validTill}&passengerLimit=${passengerLimit}`
+);
+
+  /* 🔔 EXISTING */
+  localStorage.setItem(
+    "newTripFingerprint",
+    JSON.stringify({
+      from,
+      to,
+      dateTime,
+      email
+    })
+  );
+
+  loadTrips();
+}
+
+/* 🔔 NEW: unified highlight source */
+const urlParams = new URLSearchParams(window.location.search);
+
+/* LOAD TRIPS */
+async function loadTrips() {
+
+  const hashTripId = window.location.hash.startsWith("#trip=")
+  ? window.location.hash.replace("#trip=", "")
+  : null;
+
+const queryTripId = new URLSearchParams(window.location.search).get("tripId");
+const storageTripId = localStorage.getItem("highlightTrip");
+
+const finalHighlightTripId =
+  hashTripId || queryTripId || storageTripId;
+  const sf = document.getElementById("searchFrom").value;
+  const st = document.getElementById("searchTo").value;
+
+  let url = `${API}/trips`;
+  const params = [];
+  if (sf) params.push(`from=${encodeURIComponent(sf)}`);
+  if (st) params.push(`to=${encodeURIComponent(st)}`);
+  if (params.length) url += "?" + params.join("&");
+
+  const res = await authFetch(url);
+  const trips = await res.json();
+
+  /* ✅ KEEP: sort by actual trip time */
+  trips.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+
+  const box = document.getElementById("trips");
+  box.innerHTML = "";
+
+  /* 🔧 ADDED: get exact IDs to highlight */
+  const newTripId = localStorage.getItem("newTripId");
+  const approvedTripId = localStorage.getItem("approvedTrip");
+
+  trips.forEach(t => {
+    if (new Date(t.validTill) < new Date()) return;
+
+    const div = document.createElement("div");
+    div.className = "trip";
+    div.id = `trip-${t._id}`;
+
+    /* 🔔 FINAL HIGHLIGHT LOGIC */
+    if (finalHighlightTripId && t._id === finalHighlightTripId) {
+      div.classList.add("highlight");
+      setTimeout(() => {
+        div.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 200);
+
+      /* one-time use */
+      localStorage.removeItem("highlightTrip");
+      history.replaceState(null, "", "/trips.html");
+    }
+
+    /* 🔧 FIX 1: highlight newly created trip (exact match) */
+    if (t._id === newTripId) {
+      div.classList.add("highlight");
+      setTimeout(() => {
+        div.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 200);
+
+      localStorage.removeItem("newTripId");
+    }
+
+    /* 🔧 FIX 2: highlight approved-request redirect */
+    if (t._id === approvedTripId) {
+      div.classList.add("highlight");
+      setTimeout(() => {
+        div.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 200);
+
+      localStorage.removeItem("approvedTrip");
+    }
+
+    const isCreator = t.creator.email === email;
+    const joined = t.passengers.some(p => p.email === email);
+    const requested = t.pendingRequests.some(p => p.email === email);
+    const isFull = t.passengers.length >= t.passengerLimit;
+
+    const fingerprint = JSON.parse(
+      localStorage.getItem("newTripFingerprint") || "null"
+    );
+
+    if (
+      fingerprint &&
+      t.from === fingerprint.from &&
+      t.to === fingerprint.to &&
+     new Date(t.dateTime).toISOString() === new Date(fingerprint.dateTime).toISOString() &&
+      t.creator.email === fingerprint.email
+    ) {
+      div.classList.add("highlight");
+      setTimeout(() => {
+        div.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 200);
+
+      localStorage.removeItem("newTripFingerprint");
+    }
+    div.innerHTML = `
+      <b>${t.from} → ${t.to}</b><br>
+      Trip Time: ${new Date(t.dateTime).toLocaleString()}<br>
+      Valid Till: ${new Date(t.validTill).toLocaleString()}<br>
+      <div style="
+  display:flex;
+  align-items:center;
+  gap:8px;
+">
+  <span>Creator:</span>
+  <span style="cursor:pointer; text-decoration:none;"
+        onclick="openProfile('${t.creator.email}')">
+    ${avatarHTML(t.creator)}
+  </span>
+</div><br>
+      Passengers: ${t.passengers.length} / ${t.passengerLimit}<br>
+      ${isFull ? "<span class='full'>FULL</span><br>" : ""}
+    `;
+
+    if (!isCreator && !joined && !requested && !isFull) {
+      const btn = document.createElement("button");
+      btn.innerText = "Request to Join";
+      btn.onclick = () => requestJoin(t._id);
+      div.appendChild(btn);
+    }
+
+    if (requested) div.innerHTML += "<br>⏳ Request Pending";
+    if (joined) div.innerHTML += "<br>✓ Joined";
+
+    if (!isCreator && joined) {
+      const chatBtn = document.createElement("button");
+      chatBtn.innerText = "Chat with Creator";
+      chatBtn.onclick = () => {
+        window.location.href =
+          `chat.html?user=${encodeURIComponent(t.creator.email)}`;
+      };
+      div.appendChild(document.createElement("br"));
+      div.appendChild(chatBtn);
+    }
+
+    if (isCreator) {
+      const del = document.createElement("button");
+      del.innerText = "Delete Trip";
+      del.onclick = () => deleteTrip(t._id);
+      div.appendChild(document.createElement("br"));
+      div.appendChild(del);
+
+      if (t.pendingRequests.length > 0) {
+        div.innerHTML += "<br><b>Requests:</b>";
+        t.pendingRequests.forEach(r => {
+          const d = document.createElement("div");
+          d.className = "req";
+          d.innerHTML = `
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:8px;
+  ">
+    ${avatarHTML(r, 24)}
+    <button onclick="approve('${t._id}','${r._id}')">Approve</button>
+  </div>
+`;
+          div.appendChild(d);
+        });
+      }
+    }
+
+    box.appendChild(div);
+  });
+}
+
+/* REQUEST JOIN */
+async function requestJoin(id) {
+  await authFetch(`${API}/request-join-trip?tripId=${id}`);
+  loadTrips();
+}
+
+/* APPROVE */
+async function approve(tripId, userId) {
+  await authFetch(
+  `${API}/approve-trip-request?tripId=${tripId}&userId=${userId}`
+);
+
+ 
+  loadTrips();
+}
+
+/* DELETE */
+async function deleteTrip(id) {
+  if (!confirm("Delete this trip?")) return;
+  await authFetch(`${API}/delete-trip?tripId=${id}`);
+  loadTrips();
+}
+
+loadTrips();
+
+// 🔁 POLLING
+setInterval(() => {
+  loadTrips();
+}, 5000);
+
+function openProfile(email) {
+  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+}
+</script>
+</div>
+
+</body>
+</html>

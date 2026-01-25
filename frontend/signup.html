@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signup • College Connect</title>
+
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e5e7eb;
+      background:
+  radial-gradient(600px 300px at 15% 20%, rgba(34,197,94,0.22), transparent 60%),
+  radial-gradient(500px 260px at 85% 75%, rgba(34,197,94,0.18), transparent 60%),
+  repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.02) 0px,
+    rgba(255,255,255,0.02) 1px,
+    transparent 1px,
+    transparent 6px
+  ),
+  linear-gradient(180deg, #020617, #000000);}
+
+    .card {
+      background: #111827;
+      padding: 32px;
+      width: 340px;
+      border-radius: 10px;
+      border: 1px solid rgba(34,197,94,0.25);
+      border-top: 4px solid #22c55e;
+      box-shadow:
+  0 20px 40px rgba(0,0,0,0.65),
+  inset 0 0 0 1px rgba(255,255,255,0.03);
+      animation: fadeUp 0.4s ease-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      margin: 10px 0;
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #1f2937;
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+    }
+
+    .password-box {
+      position: relative;
+    }
+
+    .password-box input {
+      padding-right: 42px;
+    }
+
+    .eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 15px;
+      color: #9ca3af;
+      user-select: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      background: #22c55e;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(34,197,94,0.45);
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #16a34a;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(34,197,94,0.6);
+    }
+
+    .status {
+  margin-top: 10px;
+  text-align: center;
+  min-height: 16px;
+  font-size: 13px; /* smaller than rest */
+  font-weight: 500;
+}
+
+.status.error {
+  color: #ef4444;
+}
+
+.status.success {
+  color: #22c55e;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 18px;          
+  font-family: Arial, sans-serif;
+  font-size: 34px;             
+  font-weight: 700;             
+  letter-spacing: 0.6px;        
+  line-height: 1.05;            
+}
+
+.brand .college {
+  color: #22c55e;
+}
+
+.brand .connect {
+  color: #e5e7eb;               
+  margin-left: 6px;
+}
+
+    .muted {
+      margin-top: 18px;
+      font-size: 14px;
+      text-align: center;
+      color: #9ca3af;
+    }
+
+    a {
+      color: #22c55e;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+.legal {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.legal a {
+  color: #22c55e;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.legal a:hover {
+  text-decoration: underline;
+}
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+.college-box {
+  position: relative;
+}
+
+.college-dropdown {
+  position: absolute;
+  width: 100%;
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.college-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.college-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #1f2937;
+}
+
+.college-dropdown li:hover {
+  background: #111827;
+}
+
+.manual-option {
+  padding: 10px;
+  text-align: center;
+  color: #22c55e;
+  cursor: pointer;
+  border-top: 1px solid #1f2937;
+}
+
+.manual-option:hover {
+  background: #111827;
+}
+@media (max-width: 480px) {
+
+  body {
+    align-items: flex-start;
+    padding-top: 32px;
+  }
+
+  .card {
+    width: calc(100% - 32px);
+    padding: 22px 18px;
+    border-radius: 8px;
+  }
+
+  .brand {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+
+  input {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  button {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .muted,
+  .legal {
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+
+  .college-dropdown {
+    max-height: 160px;
+  }
+
+  .college-dropdown li,
+  .manual-option {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="card">
+  <div class="brand">
+  <span class="college">College</span>
+  <span class="connect">Connect</span>
+</div>
+<input id="name" placeholder="Name">
+<div class="college-box">
+  <input id="collegeSearch" placeholder="Search your college" autocomplete="off">
+
+  <div class="college-dropdown" style="display:none">
+    <ul id="collegeResults"></ul>
+
+    <li class="manual-option" onclick="enableManualCollege()">
+  My college is not listed
+</li>
+    </div>
+  </div>
+<input type="hidden" id="collegeId">
+<input id="manualCollege" placeholder="Enter your college name" style="display:none">
+    <input id="email" placeholder="Email (College email preferred)">
+
+    <div class="password-box">
+      <input id="password" type="password" placeholder="Password">
+      <span class="eye" onclick="togglePassword('password', this)">👁</span>
+    </div>
+
+    <button onclick="signup()">Signup</button>
+<div class="legal">
+  By signing up, you agree to our
+  <a href="privacy.html" target="_blank">Privacy Policy</a>.
+</div>
+
+    <p id="status" class="status"></p>
+
+    <p class="muted">
+      Already have an account?
+      <a href="login.html">Login here</a>
+    </p>
+  </div>
+
+  <script src="signup.js"></script>
+
+  <script>
+    function togglePassword(id, eye) {
+      const input = document.getElementById(id);
+      if (!input.value) return;
+      if (input.type === "password") {
+        input.type = "text";
+        eye.textContent = "🔒";
+      } else {
+        input.type = "password";
+        eye.textContent = "👁";
+      }
+    }
+  </script>
+
+</body>
+</html>

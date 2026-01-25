@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forum • College Connect</title>
+  <style>
+    body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PAGE */
+.page {
+  width: 100%;
+  max-width: 900px;
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+/* HEADINGS */
+h1 {
+  margin-top: 0;
+  color: #22c55e;
+}
+
+h3 {
+  color: #e5e7eb;
+}
+
+.subheading {
+  color: #9ca3af;
+  font-size: 16px;
+  margin-top: 6px;
+  margin-bottom: 28px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .subheading {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+}
+
+
+/* POST CARD */
+.post {
+  background: #020617;
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+/* REPLIES */
+.reply {
+  margin-left: 20px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* INPUTS */
+input,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(34,197,94,0.4);
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+/* HIGHLIGHTED POST */
+.highlight {
+  border: 2px solid #22c55e;
+  background: rgba(34,197,94,0.08);
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+/* 🔽 Smaller buttons ONLY inside replies */
+.reply button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+@media (max-width: 640px) {
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+}
+
+
+@media (max-width: 640px) {
+  input,
+  textarea,
+  button {
+    width: 100%;
+  }
+
+  button {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .reply {
+    margin-left: 0;
+    padding-left: 12px;
+    border-left: 2px solid rgba(34,197,94,0.3);
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 16px;
+  }
+}
+
+
+.post img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+<h1>Forum</h1>
+<div class="subheading">
+  Ask questions, share knowledge, and help your campus community
+</div>
+
+
+<!-- CREATE POST -->
+<h3>Create Post</h3>
+
+<div class="create-post">
+  <input id="title" placeholder="Title">
+
+  <textarea id="content" placeholder="Content"></textarea>
+
+  <input type="file" id="postImages" accept="image/*" multiple>
+  <small>Max 3 images</small>
+
+  <button onclick="createPost()">Post</button>
+</div>
+
+<hr>
+
+<!-- SEARCH -->
+<input id="search" placeholder="Search posts">
+<button onclick="loadPosts()">Search</button>
+
+<hr>
+
+<div id="posts"></div>
+
+
+
+<script>
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.clear();
+    alert("Your account has been banned or logged out.");
+    window.location.href = "login.html";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
+}
+
+const email = localStorage.getItem("email");
+const payload = JSON.parse(atob(token.split(".")[1]));
+const isModerator = payload.role === "moderator" || payload.role === "admin";
+
+function avatarHTML(user, size = 28) {
+  const img = user.profilePic
+  ? `${API}/uploads/${user.profilePic}`
+  : `${API}/uploads/default-avatar.png`;
+
+  return `
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-height:${size}px;
+    ">
+      <img
+        src="${img}"
+        onerror="this.src='${API}/uploads/default-avatar.png'"
+        style="
+          width:${size}px;
+          height:${size}px;
+          border-radius:50%;
+          object-fit:cover;
+          flex-shrink:0;
+        "
+      >
+      <div style="
+        line-height:1.2;
+        white-space:nowrap;
+      ">
+        ${user.name || user.email}
+      </div>
+    </div>
+  `;
+}
+
+/* 🔔 ADDED: get postId from URL hash */
+const highlightedPostId = window.location.hash.startsWith("#post=")
+  ? window.location.hash.replace("#post=", "")
+  : null;
+
+function headers() {
+  return { Authorization: "Bearer " + token };
+}
+
+async function createPost() {
+  const titleEl = document.getElementById("title");
+  const contentEl = document.getElementById("content");
+  const fileEl = document.getElementById("postImages");
+
+  const title = titleEl.value.trim();
+  const content = contentEl.value.trim();
+  const files = fileEl.files;
+
+  if (!title || !content) {
+    alert("Title and content are required");
+    return;
+  }
+
+  if (files.length > 3) {
+    alert("Maximum 3 images allowed");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("title", title);
+  fd.append("content", content);
+
+  for (let f of files) {
+    fd.append("images", f);
+  }
+
+  await authFetch(`${API}/create-post`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token
+    },
+    body: fd
+  });
+
+  // 🔁 reset form like marketplace
+  titleEl.value = "";
+  contentEl.value = "";
+  fileEl.value = "";
+
+  loadPosts();
+}
+async function loadPosts() {
+  const q = document.getElementById("search").value;
+  const res = await authFetch(
+  `${API}/posts?q=${encodeURIComponent(q)}`
+);
+  const posts = await res.json();
+
+  const box = document.getElementById("posts");
+  box.innerHTML = "";
+
+  posts.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "post";
+    div.id = `post-${p._id}`; // 🔔 ADDED: id for scrolling
+
+    /* 🔔 ADDED: highlight if matched */
+    if (p._id === highlightedPostId) {
+      div.classList.add("highlight");
+      setTimeout(() => div.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+    }
+
+    div.innerHTML = `
+      <b>${p.title}</b><br>
+      ${p.content}<br>
+${
+  (p.images || []).map(img =>
+    `<img src="${API}/uploads/${img}"
+          onerror="this.style.display='none'"
+          style="max-width:200px;display:block;margin:6px 0;border-radius:6px">`
+  ).join("")
+}    <div style="display:flex;align-items:center;gap:6px;font-size:12px;">
+  <span>By</span>
+  <span onclick="openProfile('${p.user.email}')"
+        style="cursor:pointer;">
+    ${avatarHTML(p.user)}
+  </span>
+</div><br>
+      ${
+        p.user.email === email || isModerator
+          ? `<button onclick="deletePost('${p._id}')">Delete</button>`
+          : ``
+      }
+     ${
+  !isModerator &&
+  p.user.email !== email &&
+  p.user.role !== "moderator" &&
+  p.user.role !== "admin"
+    ? `<button onclick="reportPost('${p._id}')">Report</button>`
+    : ``
+}
+      <br><br>
+      <input id="r-${p._id}" placeholder="Reply">
+      <button onclick="reply('${p._id}')">Reply</button>
+    `;
+
+    p.replies.forEach(r => {
+      const rd = document.createElement("div");
+      rd.className = "reply";
+
+      rd.innerHTML = `
+        <div style="display:flex;align-items:center;gap:6px;">
+  <span>${r.text} —</span>
+  <span onclick="openProfile('${r.user.email}')"
+        style="cursor:pointer;">
+    ${avatarHTML(r.user, 24)}
+  </span>
+</div>
+        ${
+  r.user.email === email && !isModerator
+    ? `<button onclick="editReply('${p._id}','${r._id}')">Edit</button>
+       <button onclick="deleteReply('${p._id}','${r._id}')">Delete</button>`
+    : ``
+}
+
+${
+  isModerator
+    ? `<button onclick="modDeleteReply('${p._id}','${r._id}')">Delete</button>`
+    : ``
+}
+      `;
+
+      div.appendChild(rd);
+    });
+
+    box.appendChild(div);
+  });
+}
+
+async function reply(postId) {
+  const text = document.getElementById(`r-${postId}`).value;
+  await authFetch(
+  `${API}/reply-post?postId=${postId}&text=${encodeURIComponent(text)}`
+);
+  loadPosts();
+}
+
+async function editPost(id) {
+  const title = prompt("New title:");
+  const content = prompt("New content:");
+  if (!title || !content) return;
+
+  await authFetch(
+    `${API}/edit-post?postId=${id}&title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}`
+  );
+
+  loadPosts();
+}
+
+async function deletePost(id) {
+  const url = isModerator
+    ? `${API}/moderator/forum/post/${id}`
+    : `${API}/delete-post?postId=${id}`;
+
+  await authFetch(url, {
+  method: isModerator ? "DELETE" : "GET"
+});
+
+  loadPosts();
+}
+
+async function editReply(postId, replyId) {
+  const text = prompt("New reply text:");
+  if (!text) return;
+
+  await authFetch(
+  `${API}/edit-reply?postId=${postId}&replyId=${replyId}&text=${encodeURIComponent(text)}`
+);
+  loadPosts();
+}
+
+async function deleteReply(postId, replyId) {
+  await authFetch(
+  `${API}/delete-reply?postId=${postId}&replyId=${replyId}`
+);
+  loadPosts();
+}
+loadPosts();
+
+// 🔁 POLLING
+setInterval(() => {
+  loadPosts();
+}, 5000);
+function openProfile(email) {
+  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+}
+
+async function reportPost(postId) {
+  if (payload.role !== "user") return;
+  const reason = prompt("Reason for reporting this post?");
+  if (!reason) return;
+
+  await authFetch(`${API}/report`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      targetType: "forum",
+      targetId: postId,
+      reason
+    })
+  });
+
+  alert("Post reported");
+}
+
+async function modDeletePost(postId) {
+  await authFetch(`${API}/moderator/forum/${postId}`, {
+    method: "DELETE",
+    headers: headers()
+  });
+  loadPosts();
+}
+
+async function modDeleteReply(postId, replyId) {
+  await authFetch(`${API}/moderator/forum/comment/${postId}/${replyId}`, {
+    method: "DELETE",
+    headers: headers()
+  });
+  loadPosts();
+}
+// 🔍 IMAGE CLICK PREVIEW — FORUM ONLY
+document.addEventListener("click", e => {
+  if (e.target.tagName === "IMG" && e.target.closest(".post")) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imageModalImg");
+
+    modalImg.src = e.target.src;
+    modal.style.display = "flex";
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("imageModal");
+  const closeBtn = document.getElementById("closeImageModal");
+
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+
+</script>
+</div>
+<div id="imageModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+">
+
+  <span id="closeImageModal"
+        style="
+          position:absolute;
+          top:16px;
+          right:20px;
+          font-size:32px;
+          font-weight:bold;
+          color:white;
+          cursor:pointer;
+          z-index:10000;
+        ">&times;</span>
+
+  <img id="imageModalImg" style="
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+  ">
+</div>
+</body>
+</html>

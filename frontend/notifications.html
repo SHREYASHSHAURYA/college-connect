@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifications • College Connect</title>
+  <style>
+    body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  padding: 0 20px;
+
+  background:
+    radial-gradient(700px 350px at 20% 20%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(600px 300px at 80% 75%, rgba(34,197,94,0.18), transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #020617, #000000);
+
+  display: flex;
+justify-content: center;
+align-items: flex-start;
+padding-top: 40px;
+padding-bottom: 40px;
+
+
+}
+
+    .notif {
+  background: #020617;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(34,197,94,0.25);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+h1 {
+  font-size: 34px;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+}
+
+    .unread {
+  border-left: 4px solid #22c55e;
+  font-weight: bold;
+}
+
+    .read {
+  opacity: 0.6;
+}
+
+.page {
+  max-width: 720px;
+  width: 100%;
+  background: #111827;
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #22c55e;
+  background: transparent;
+  color: #22c55e;
+  transition: all 0.2s ease;
+}
+#notifications {
+  margin-top: 10px;
+}
+
+button:hover {
+  background: rgba(34,197,94,0.12);
+  transform: translateY(-1px);
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(34,197,94,0.4),
+    transparent
+  );
+  margin: 26px 0;
+}
+
+  </style>
+</head>
+<body>
+<div class="page">
+
+<h1><span style="color:#22c55e">Notifications</span></h1>
+
+<div style="margin-bottom:15px;">
+  <div class="filters">
+    <button onclick="setFilter('all')">All</button>
+    <button onclick="setFilter('trip')">Trips</button>
+    <button onclick="setFilter('marketplace')">Marketplace</button>
+    <button onclick="setFilter('forum')">Forum</button>
+  </div>
+</div>
+
+<button onclick="markAllRead()">Mark all as read</button>
+<hr>
+
+<div id="notifications"></div>
+</div>
+
+
+<script>
+const API = "http://localhost:5000";
+const token = localStorage.getItem("token");
+
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.clear();
+    window.location.href = "login.html";
+    throw new Error("Unauthorized");
+  }
+
+  return res;
+}
+
+let currentFilter = "all";
+
+function headers() {
+  return { Authorization: "Bearer " + token };
+}
+
+/* 🔔 ADDED: helper to build redirect URL */
+function buildRedirect(n) {
+  // If backend already sent full link, use it
+  if (!n.link) return null;
+
+  // Forum → exact post
+  if (n.type === "forum" && n.postId) {
+    return `${n.link}#post=${n.postId}`;
+  }
+
+  // Chat → exact user
+  if (n.type === "chat" && n.fromEmail) {
+    return `${n.link}#user=${n.fromEmail}`;
+  }
+
+  // Trip → exact trip
+  if (n.type === "trip" && n.tripId) {
+    return `${n.link}#trip=${n.tripId}`;
+  }
+
+  // Friends → exact user
+  if (n.type === "friend" && n.fromEmail) {
+    return `${n.link}#user=${n.fromEmail}`;
+  }
+
+  // Fallback (existing behavior)
+  return n.link;
+}
+
+function setFilter(type) {
+  currentFilter = type;
+  loadNotifications();
+}
+
+/* LOAD NOTIFICATIONS */
+async function loadNotifications() {
+  const res = await authFetch(`${API}/notifications`);
+
+  const data = await res.json();
+  const box = document.getElementById("notifications");
+  box.innerHTML = "";
+
+  if (data.length === 0) {
+    box.innerHTML = "<i>No notifications</i>";
+    return;
+  }
+
+data
+  .filter(n => n.type !== "chat" && n.type !== "friend")
+  .filter(n => {
+    if (currentFilter === "all") return true;
+    return n.type === currentFilter;
+  })
+  .forEach(n => {
+    const div = document.createElement("div");
+    div.className = "notif " + (n.isRead ? "read" : "unread");
+
+    div.innerHTML = `
+      ${n.text}<br>
+      <small>${new Date(n.createdAt).toLocaleString()}</small>
+    `;
+
+    div.onclick = async () => {
+  if (!n.isRead) {
+    await authFetch(`${API}/read-notification?id=${n._id}`);
+  }
+
+  // 🔔 FORCE DASHBOARD BADGE REFRESH
+  localStorage.setItem("forceDashboardRefresh", Date.now());
+
+  /* 🔔 store trip for highlighting */
+  if (n.type === "trip" && n.tripId) {
+    localStorage.setItem("approvedTrip", n.tripId);
+  }
+
+  const redirect = buildRedirect(n);
+  if (redirect) {
+    window.location.href = redirect;
+  } else {
+    loadNotifications();
+  }
+};
+
+    box.appendChild(div);
+  });
+}
+
+/* MARK ALL READ */
+async function markAllRead() {
+  await authFetch(`${API}/read-all-notifications`);
+  loadNotifications();
+}
+
+loadNotifications();
+
+// 🔁 POLLING
+setInterval(() => {
+  loadNotifications();
+}, 5000);
+</script>
+
+</body>
+</html>
