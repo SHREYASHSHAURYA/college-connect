@@ -1,23 +1,20 @@
-require("dotenv").config();
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false, // true only for 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const client = SibApiV3Sdk.ApiClient.instance;
+client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 async function sendEmail({ to, subject, text, html }) {
-  await transporter.sendMail({
-    from: `"College Connect" <${process.env.EMAIL_USER}>`,
-    to,
+  await apiInstance.sendTransacEmail({
+    sender: {
+      email: process.env.EMAIL_FROM,
+      name: "College Connect"
+    },
+    to: [{ email: to }],
     subject,
-    text,
-    html
+    textContent: text,
+    htmlContent: html
   });
 }
 
