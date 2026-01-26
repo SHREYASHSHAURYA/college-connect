@@ -39,7 +39,7 @@ status.innerText = "Signup successful. You can now login.";
 
     /* 🔔 ADDED — REDIRECT TO LOGIN (NO BACKEND CHANGE) */
     setTimeout(() => {
-      window.location.href = "login.html";
+      window.location.href = "/login";
     }, 800);
 
   } catch {
