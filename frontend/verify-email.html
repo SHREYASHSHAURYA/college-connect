@@ -61,10 +61,7 @@
 </div>
 
 <script>
-  const API =
-    location.hostname === "localhost"
-      ? "http://localhost:5000"
-      : "https://YOUR_API_DOMAIN";
+  const API = window.location.origin;
 
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
