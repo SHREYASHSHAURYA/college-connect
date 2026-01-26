@@ -91,7 +91,7 @@ if (collegeDoc && emailDomain) {
 });
 
     await user.save();
-    const verifyLink = `http://localhost:5000/verify-email.html?token=${emailToken}`;
+    const verifyLink = `${process.env.BASE_URL}/verify-email.html?token=${emailToken}`;
 
 await sendEmail({
   to: email,
@@ -217,7 +217,7 @@ router.post("/forgot-password", async (req, res) => {
   user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
 
-  const resetLink = `http://localhost:5000/reset-password.html?token=${resetToken}`;
+  const resetLink = `${process.env.BASE_URL}/reset-password.html?token=${resetToken}`;
 
 await sendEmail({
   to: user.email,
