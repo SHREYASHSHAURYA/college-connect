@@ -264,7 +264,7 @@ async function authFetch(url, options = {}) {
   if (res.status === 401 || res.status === 403) {
     localStorage.clear();
     alert("Your account has been banned or logged out.");
-    window.location.href = "login.html";
+    window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 
@@ -632,7 +632,7 @@ if (hash.startsWith("#item=")) {
   }, 600);
 }
 function openProfile(email) {
-  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+  window.location.href = `/profile?email=${encodeURIComponent(email)}`;
 }
 
 async function reportItem(itemId) {

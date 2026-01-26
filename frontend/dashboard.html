@@ -158,38 +158,38 @@ justify-self: stretch;
 
   <div class="stack">
 
-    <div class="card" onclick="go('chat.html')">
+    <div class="card" onclick="go('/chat')">
       Chat 💬 <span id="chatCount"></span>
     </div>
 
-    <div class="card" onclick="go('friends.html')">
+    <div class="card" onclick="go('/friends')">
       Friends 👥 <span id="friendsCount"></span>
     </div>
 
-    <div class="card" onclick="go('trips.html')">
+    <div class="card" onclick="go('/trips')">
       Trips 🧭 <span id="tripsCount"></span>
     </div>
 
-    <div class="card" onclick="go('marketplace.html')">
+    <div class="card" onclick="go('/marketplace')">
       Marketplace 🛒
     </div>
 
-    <div class="card" onclick="go('forum.html')">
+    <div class="card" onclick="go('/forum')">
       Forum 🗣️
     </div>
 
-    <div class="card" onclick="go('notifications.html')">
+    <div class="card" onclick="go('/notifications')">
       Notifications 🔔 <span id="notifCount"></span>
     </div>
 
-    <div class="card" onclick="go('profile.html')">
+    <div class="card" onclick="go('/profile')">
       Profile 👤
     </div>
 
     <div id="moderatorCard"
          class="card"
          style="display:none"
-         onclick="go('moderator.html')">
+         onclick="go('/moderator')">
       Moderator 🛡️ <span id="reportCount"></span>
     </div>
 
@@ -204,7 +204,7 @@ function go(page) {
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("email");
-  window.location.href = "login.html";
+  window.location.href = "/login";
 }
 
 if (!localStorage.getItem("token")) {
@@ -239,7 +239,7 @@ async function authFetch(url, options = {}) {
     if (data.message === "Account banned") {
       localStorage.clear();
       alert("Your account has been banned.");
-      window.location.href = "login.html";
+      window.location.href = "/login";
       throw new Error("Banned");
     }
   }

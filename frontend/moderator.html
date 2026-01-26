@@ -526,15 +526,15 @@ async function unbanUser(userId) {
 
 function openTarget(type, id) {
   if (type === "user") {
-  window.location.href = `/profile.html?email=${encodeURIComponent(id)}`;
+  window.location.href = `/profile?email=${encodeURIComponent(id)}`;
 }
 
   if (type === "forum") {
-    window.location.href = `/forum.html#post=${id}`;
+    window.location.href = `/forum#post=${id}`;
   }
 
   if (type === "marketplace") {
-    window.location.href = `/marketplace.html#item=${id}`;
+    window.location.href = `/marketplace#item=${id}`;
   }
 }
 loadBannedUsers();
@@ -543,7 +543,7 @@ loadVerificationRequests();
 loadContactMessages();
 
 function viewUser(email) {
-  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+  window.location.href = `/profile?email=${encodeURIComponent(email)}`;
 }
 
 // 🔁 POLLING — refresh reports every 5 seconds

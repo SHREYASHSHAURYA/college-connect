@@ -102,6 +102,10 @@ app.get("/reset-password", (req, res) =>
   res.sendFile(path.join(frontendPath, "reset-password.html"))
 );
 
+app.get("/forgot-password", (req, res) =>
+  res.sendFile(path.join(frontendPath, "forgot-password.html"))
+);
+
 /* ROUTES — UNTOUCHED */
 app.use(authRoutes);
 app.use(friendsRoutes);

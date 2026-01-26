@@ -217,8 +217,15 @@ hr {
 
 <script>
 
-const API = window.location.origin;const token = localStorage.getItem("token");
-const myEmail = localStorage.getItem("email");
+const API = window.location.origin;
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "/login";
+  throw new Error("No token");
+}
+
+const email = localStorage.getItem("email");
 const payload = JSON.parse(atob(token.split(".")[1]));
 const isModerator = payload.role === "moderator" || payload.role === "admin";
 
@@ -234,7 +241,7 @@ async function authFetch(url, options = {}) {
   if (res.status === 401 || res.status === 403) {
     localStorage.clear();
     alert("Your account has been banned or logged out.");
-    window.location.href = "login.html";
+    window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 
@@ -447,7 +454,7 @@ reportBox.appendChild(btn);
     const btn = document.getElementById("chatBtn");
     btn.style.display = "inline-block";
     btn.onclick = () => {
-      window.location.href = `/chat.html?with=${user.email}`;
+      window.location.href = `/chat?with=${user.email}`;
     };
   }
 
@@ -485,7 +492,7 @@ reportBox.appendChild(btn);
     const btn = document.getElementById("chatBtn");
     btn.style.display = "inline-block";
     btn.onclick = () => {
-      window.location.href = `/chat.html?with=${user.email}`;
+      window.location.href = `/chat?with=${user.email}`;
     };
   }
 }
@@ -507,7 +514,7 @@ async function loadItems() {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-  <a href="/marketplace.html#item=${i._id}" style="text-decoration:none;color:inherit">
+  <a href="/marketplace#item=${i._id}" style="text-decoration:none;color:inherit">
     <b>${i.title}</b><br>
     ₹${i.price}<br>
     Status: ${i.status || "AVAILABLE"}
@@ -535,7 +542,7 @@ async function loadPosts() {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-  <a href="/forum.html#post=${p._id}" style="text-decoration:none;color:inherit">
+  <a href="/forum#post=${p._id}" style="text-decoration:none;color:inherit">
     <b>${p.title || "Post"}</b><br>
     <span class="muted">${(p.content || "").slice(0,120)}</span>
   </a>
@@ -550,7 +557,7 @@ loadProfile();
 /*loadItems();
 loadPosts();*/
 function startChat() {
-  window.location.href = `/chat.html?with=${profileEmail}`;
+  window.location.href = `/chat?with=${profileEmail}`;
 }
 
   function sendFriendRequest() {

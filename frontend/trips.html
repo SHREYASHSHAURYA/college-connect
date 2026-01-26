@@ -218,7 +218,7 @@ async function authFetch(url, options = {}) {
   if (res.status === 401 || res.status === 403) {
     localStorage.clear();
     alert("Your account has been banned or logged out.");
-    window.location.href = "login.html";
+    window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 
@@ -361,7 +361,7 @@ const finalHighlightTripId =
 
       /* one-time use */
       localStorage.removeItem("highlightTrip");
-      history.replaceState(null, "", "/trips.html");
+      history.replaceState(null, "", "/trips");
     }
 
     /* 🔧 FIX 1: highlight newly created trip (exact match) */
@@ -441,7 +441,7 @@ const finalHighlightTripId =
       chatBtn.innerText = "Chat with Creator";
       chatBtn.onclick = () => {
         window.location.href =
-          `chat.html?user=${encodeURIComponent(t.creator.email)}`;
+          `/chat?user=${encodeURIComponent(t.creator.email)}`;
       };
       div.appendChild(document.createElement("br"));
       div.appendChild(chatBtn);
@@ -509,7 +509,7 @@ setInterval(() => {
 }, 5000);
 
 function openProfile(email) {
-  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+  window.location.href = `/profile?email=${encodeURIComponent(email)}`;
 }
 </script>
 </div>

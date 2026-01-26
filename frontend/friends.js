@@ -13,7 +13,7 @@ async function authFetch(path, options = {}) {
 
   if (res.status === 401 || res.status === 403) {
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 
@@ -45,7 +45,7 @@ function avatarHTML(user, size = 36) {
 
 if (!token) {
   alert("No token found. Please login again.");
-  window.location.href = "login.html";
+  window.location.href = "/login";
 }
 
 // ===== HELPERS =====
@@ -103,7 +103,7 @@ friendsBtn.onclick = async () => {
       // ✅ SAME REDIRECT AS MARKETPLACE / FORUM / CHAT
       div.querySelector(".profile-link").onclick = () => {
         window.location.href =
-          `/profile.html?email=${encodeURIComponent(f.email)}`;
+          `/profile?email=${encodeURIComponent(f.email)}`;
       };
 
       div.querySelectorAll("button")[0].onclick = async () => {
@@ -153,7 +153,7 @@ requestsBtn.onclick = async () => {
       // ✅ SAME REDIRECT
       div.querySelector(".profile-link").onclick = () => {
         window.location.href =
-          `/profile.html?email=${encodeURIComponent(u.email)}`;
+          `/profile?email=${encodeURIComponent(u.email)}`;
       };
 
       const buttons = div.querySelectorAll("button");

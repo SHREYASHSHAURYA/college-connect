@@ -354,7 +354,7 @@ async function authFetch(url, options = {}) {
   if (res.status === 401 || res.status === 403) {
     localStorage.clear();
     alert("Your account has been banned or logged out.");
-    window.location.href = "login.html";
+    window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 
@@ -647,7 +647,7 @@ const autoUser = params.get("user") || params.get("with");
 if (autoUser) {
   document.getElementById("withEmail").value = autoUser;
   loadInbox().then(startChat);
-  history.replaceState(null, "", "chat.html");
+  history.replaceState(null, "", "/chat");
 }
 loadInbox();
 
@@ -657,7 +657,7 @@ setInterval(() => {
 }, 4000); // every 4 seconds
 
 function openProfile(email) {
-  window.location.href = `/profile.html?email=${encodeURIComponent(email)}`;
+  window.location.href = `/profile?email=${encodeURIComponent(email)}`;
 }
 // 🔍 IMAGE / VIDEO CLICK PREVIEW (CHAT)
 document.addEventListener("click", e => {
