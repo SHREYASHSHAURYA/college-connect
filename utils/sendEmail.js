@@ -1,20 +1,23 @@
-const SibApiV3Sdk = require("sib-api-v3-sdk");
+require("dotenv").config();
+const nodemailer = require("nodemailer");
 
-const client = SibApiV3Sdk.ApiClient.instance;
-client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.BREVO_SMTP_USER,
+    pass: process.env.BREVO_SMTP_KEY
+  }
+});
 
 async function sendEmail({ to, subject, text, html }) {
-  await apiInstance.sendTransacEmail({
-    sender: {
-      email: process.env.EMAIL_FROM,
-      name: "College Connect"
-    },
-    to: [{ email: to }],
+  await transporter.sendMail({
+    from: `"College Connect" <${process.env.EMAIL_FROM}>`,
+    to,
     subject,
-    textContent: text,
-    htmlContent: html
+    text,
+    html
   });
 }
 
