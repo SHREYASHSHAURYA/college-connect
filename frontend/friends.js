@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const API = "http://localhost:5000";
+const API = window.location.origin;
 const token = localStorage.getItem("token");
 
 async function authFetch(path, options = {}) {
