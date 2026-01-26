@@ -1,32 +1,38 @@
 require("dotenv").config();
-const SibApiV3Sdk = require("@getbrevo/brevo");
-
-const client = SibApiV3Sdk.ApiClient.instance;
-
-// Authenticate with API key
-const apiKey = client.authentications["api-key"];
-apiKey.apiKey = process.env.BREVO_API_KEY;
-
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 async function sendEmail({ to, subject, text, html }) {
   console.log("📧 sendEmail CALLED for:", to);
 
   try {
-    const response = await apiInstance.sendTransacEmail({
-      sender: {
-        email: process.env.EMAIL_FROM,
-        name: "College Connect"
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "api-key": process.env.BREVO_API_KEY
       },
-      to: [{ email: to }],
-      subject,
-      textContent: text,
-      htmlContent: html
+      body: JSON.stringify({
+        sender: {
+          name: "College Connect",
+          email: process.env.EMAIL_FROM
+        },
+        to: [{ email: to }],
+        subject: subject,
+        textContent: text,
+        htmlContent: html
+      })
     });
 
-    console.log("✅ EMAIL SENT VIA BREVO API:", response.messageId);
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("❌ BREVO API ERROR:", data);
+      throw new Error("Brevo email failed");
+    }
+
+    console.log("✅ EMAIL SENT VIA BREVO API:", data.messageId);
   } catch (err) {
-    console.error("❌ BREVO API EMAIL FAILED:", err.response?.body || err);
+    console.error("❌ EMAIL FAILED:", err);
     throw err;
   }
 }
