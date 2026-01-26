@@ -14,7 +14,13 @@ const transporter = nodemailer.createTransport({
     pass: process.env.BREVO_SMTP_KEY
   }
 });
-
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ SMTP VERIFY FAILED:", error);
+  } else {
+    console.log("✅ SMTP SERVER READY");
+  }
+});
 async function sendEmail({ to, subject, text, html }) {
   console.log("📧 sendEmail CALLED for:", to);
 
