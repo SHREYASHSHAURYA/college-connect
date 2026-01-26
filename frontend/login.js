@@ -36,7 +36,7 @@ status.innerText = "Login successful";
 
     /* 🔔 ADDED — REDIRECT TO DASHBOARD (NO EXISTING LINE TOUCHED) */
     setTimeout(() => {
-      window.location.href = "dashboard.html";
+      window.location.href = "/dashboard";
     }, 500);
 
   } catch (e) {
