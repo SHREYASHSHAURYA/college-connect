@@ -32,3 +32,5 @@ async function sendEmail({ to, subject, text, html }) {
     console.error("❌ EMAIL FAILED:", err);
   }
 }
+
+module.exports = sendEmail;
