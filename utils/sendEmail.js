@@ -12,6 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendEmail({ to, subject, text, html }) {
+  console.log("📧 sendEmail CALLED for:", to);
+
   await transporter.sendMail({
     from: `"College Connect" <${process.env.EMAIL_FROM}>`,
     to,
@@ -19,6 +21,8 @@ async function sendEmail({ to, subject, text, html }) {
     text,
     html
   });
+
+  console.log("✅ sendMail FINISHED");
 }
 
 module.exports = sendEmail;
