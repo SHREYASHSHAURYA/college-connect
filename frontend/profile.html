@@ -217,9 +217,7 @@ hr {
 
 <script>
 
-
-const API = "http://localhost:5000";
-const token = localStorage.getItem("token");
+const API = window.location.origin;const token = localStorage.getItem("token");
 const myEmail = localStorage.getItem("email");
 const payload = JSON.parse(atob(token.split(".")[1]));
 const isModerator = payload.role === "moderator" || payload.role === "admin";
