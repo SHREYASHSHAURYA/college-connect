@@ -1,41 +1,33 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("@getbrevo/brevo");
 
-console.log("ENV CHECK → BREVO_SMTP_USER:", process.env.BREVO_SMTP_USER ? "FOUND" : "MISSING");
-console.log("ENV CHECK → BREVO_SMTP_KEY:", process.env.BREVO_SMTP_KEY ? "FOUND" : "MISSING");
-console.log("ENV CHECK → EMAIL_FROM:", process.env.EMAIL_FROM ? "FOUND" : "MISSING");
+const client = SibApiV3Sdk.ApiClient.instance;
 
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.BREVO_SMTP_USER,
-    pass: process.env.BREVO_SMTP_KEY
-  }
-});
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("❌ SMTP VERIFY FAILED:", error);
-  } else {
-    console.log("✅ SMTP SERVER READY");
-  }
-});
+// Authenticate with API key
+const apiKey = client.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
 async function sendEmail({ to, subject, text, html }) {
   console.log("📧 sendEmail CALLED for:", to);
 
   try {
-    const info = await transporter.sendMail({
-      from: `"College Connect" <${process.env.EMAIL_FROM}>`,
-      to,
+    const response = await apiInstance.sendTransacEmail({
+      sender: {
+        email: process.env.EMAIL_FROM,
+        name: "College Connect"
+      },
+      to: [{ email: to }],
       subject,
-      text,
-      html
+      textContent: text,
+      htmlContent: html
     });
 
-    console.log("✅ EMAIL SENT. Message ID:", info.messageId);
+    console.log("✅ EMAIL SENT VIA BREVO API:", response.messageId);
   } catch (err) {
-    console.error("❌ EMAIL FAILED:", err);
+    console.error("❌ BREVO API EMAIL FAILED:", err.response?.body || err);
+    throw err;
   }
 }
 
