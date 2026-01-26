@@ -339,7 +339,7 @@ color: #22c55e;
 </div>
 <script>
 const token = localStorage.getItem("token");
-const API = "http://localhost:5000";
+const API = window.location.origin;
 
 async function authFetch(url, options = {}) {
   const res = await fetch(url, {
@@ -375,7 +375,7 @@ const img = user.profilePic
   `;
 }
 
-const socket = io("http://localhost:5000", {
+const socket = io(window.location.origin, {
   auth: { token }
 });
 if (!token) alert("No token");
