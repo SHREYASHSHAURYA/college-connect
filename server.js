@@ -44,6 +44,64 @@ app.use("/uploads", express.static("uploads"));
 /* FRONTEND — MUST BE BEFORE ROUTES */
 app.use(express.static(path.join(__dirname, "frontend")));
 
+const frontendPath = path.join(__dirname, "frontend");
+
+app.get("/login", (req, res) =>
+  res.sendFile(path.join(frontendPath, "login.html"))
+);
+
+app.get("/signup", (req, res) =>
+  res.sendFile(path.join(frontendPath, "signup.html"))
+);
+
+app.get("/privacy", (req, res) =>
+  res.sendFile(path.join(frontendPath, "privacy.html"))
+);
+
+app.get("/dashboard", (req, res) =>
+  res.sendFile(path.join(frontendPath, "dashboard.html"))
+);
+
+app.get("/profile", (req, res) =>
+  res.sendFile(path.join(frontendPath, "profile.html"))
+);
+
+app.get("/moderator", (req, res) =>
+  res.sendFile(path.join(frontendPath, "moderator.html"))
+);
+
+app.get("/chat", (req, res) =>
+  res.sendFile(path.join(frontendPath, "chat.html"))
+);
+
+app.get("/forum", (req, res) =>
+  res.sendFile(path.join(frontendPath, "forum.html"))
+);
+
+app.get("/friends", (req, res) =>
+  res.sendFile(path.join(frontendPath, "friends.html"))
+);
+
+app.get("/marketplace", (req, res) =>
+  res.sendFile(path.join(frontendPath, "marketplace.html"))
+);
+
+app.get("/trips", (req, res) =>
+  res.sendFile(path.join(frontendPath, "trips.html"))
+);
+
+app.get("/notifications", (req, res) =>
+  res.sendFile(path.join(frontendPath, "notifications.html"))
+);
+
+app.get("/verify-password", (req, res) =>
+  res.sendFile(path.join(frontendPath, "verify-password.html"))
+);
+
+app.get("/reset-password", (req, res) =>
+  res.sendFile(path.join(frontendPath, "reset-password.html"))
+);
+
 /* ROUTES — UNTOUCHED */
 app.use(authRoutes);
 app.use(friendsRoutes);
