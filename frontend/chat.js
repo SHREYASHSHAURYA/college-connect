@@ -1,7 +1,7 @@
 const token = localStorage.getItem("token");
 if (!token) alert("No token");
 
-const socket = io("http://localhost:5000", {
+const socket = io({
   auth: { token }
 });
 
@@ -23,11 +23,11 @@ async function loadHistory() {
   const withEmail = document.getElementById("withEmail").value;
 
   const res = await fetch(
-    `http://localhost:5000/messages?withEmail=${withEmail}`,
-    {
-      headers: { Authorization: "Bearer " + token }
-    }
-  );
+  `/messages?withEmail=${withEmail}`,
+  {
+    headers: { Authorization: "Bearer " + token }
+  }
+);
 
   const data = await res.json();
   const me = JSON.parse(atob(token.split(".")[1])).email;
