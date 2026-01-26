@@ -102,9 +102,9 @@ await sendEmail({
     res.json({ message: "Registered successfully" });
 
   } catch (err) {
-    //registration error
-    res.status(500).json({ message: "Server error" });
-  }
+  console.error("REGISTER ERROR:", err);
+  res.status(500).json({ message: "Server error" });
+}
 });
 
 router.get("/verify-email", async (req, res) => {
