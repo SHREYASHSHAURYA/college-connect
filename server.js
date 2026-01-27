@@ -54,7 +54,7 @@ app.get("/signup", (req, res) =>
   res.sendFile(path.join(frontendPath, "signup.html"))
 );
 
-app.get("/Privacy POlicy", (req, res) =>
+app.get("/privacy-policy", (req, res) =>
   res.sendFile(path.join(frontendPath, "privacy.html"))
 );
 
