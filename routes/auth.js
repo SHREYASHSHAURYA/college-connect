@@ -191,7 +191,7 @@ await user.save();
     });
 
   } catch (err) {
-    // login error 
+    console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

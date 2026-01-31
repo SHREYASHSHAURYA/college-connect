@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 async function sendEmail({ to, subject, text, html }) {
-  console.log("📧 sendEmail CALLED for:", to);
+  
 
   try {
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
@@ -30,7 +30,7 @@ async function sendEmail({ to, subject, text, html }) {
       throw new Error("Brevo email failed");
     }
 
-    console.log("✅ EMAIL SENT VIA BREVO API:", data.messageId);
+    
   } catch (err) {
     console.error("❌ EMAIL FAILED:", err);
     throw err;
