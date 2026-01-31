@@ -151,6 +151,7 @@ input[type="datetime-local"] {
   button {
     width: 100%;
     max-width: 100%;
+ box-sizing: border-box;
   }
 
   h1, h3 {
@@ -178,11 +179,10 @@ input[type="datetime-local"] {
 <h3>Create Trip</h3>
 <input id="from" placeholder="From"><br><br>
 <input id="to" placeholder="To"><br><br>
-
-<label>Trip Date & Time</label><br>
+<label for="dateTime">Trip Date & Time</label><br>
 <input id="dateTime" type="datetime-local"><br><br>
 
-<label>Valid Till (optional)</label><br>
+<label for="validTill">Valid Till (optional)</label><br>
 <input id="validTill" type="datetime-local"><br><br>
 
 <input id="passengerLimit" type="number" min="1" placeholder="Passenger Limit"><br><br>
@@ -333,7 +333,10 @@ const finalHighlightTripId =
   if (params.length) url += "?" + params.join("&");
 
   const res = await authFetch(url);
-  const trips = await res.json();
+const text = await res.text();
+if (text.trim().startsWith("<")) return;
+const trips = JSON.parse(text);
+
 
   /* ✅ KEEP: sort by actual trip time */
   trips.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));

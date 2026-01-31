@@ -376,14 +376,15 @@ if (user.isSelf) {
   document.getElementById("changePasswordWrapper").style.display = "none";
 }
 
-  const avatar = document.getElementById("avatar");
-  avatar.src = user.profilePic
-    ? `${API}/uploads/${user.profilePic}`
-    : `${API}/uploads/default-avatar.png`;
+avatar.src = user.profilePic
+  ? `${API}/uploads/${user.profilePic}`
+  : `${API}/uploads/default-avatar.png`;
 
-  avatar.onerror = () => {
-    avatar.src = `${API}/uploads/default-avatar.png`;
-  };
+avatar.onerror = () => {
+  avatar.src = `${API}/uploads/default-avatar.png`;
+};
+
+
 
   document.getElementById("profileEmail").textContent = user.email;
   document.getElementById("profileCollege").textContent = user.college;
@@ -747,4 +748,4 @@ document.addEventListener("DOMContentLoaded", () => {
   ">
 </div>
 </body>
-</html>
+</html> 

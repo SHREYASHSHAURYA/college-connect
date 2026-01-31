@@ -1,4 +1,4 @@
-// ===== CONFIG =====
+
 const API = window.location.origin;
 const token = localStorage.getItem("token");
 
@@ -53,6 +53,9 @@ async function apiGet(path) {
   const res = await authFetch(path);
 
   const text = await res.text();
+  if (!text || text.trim().startsWith("<")) {
+    return [];
+  }
   if (!res.ok) throw new Error(text);
   return JSON.parse(text);
 }
@@ -61,6 +64,9 @@ async function apiText(path) {
   const res = await authFetch(path);
 
   const text = await res.text();
+   if (!text || text.trim().startsWith("<")) {
+    return "";
+  }
   if (!res.ok) throw new Error(text);
   return text;
 }

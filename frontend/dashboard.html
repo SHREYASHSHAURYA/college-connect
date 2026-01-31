@@ -126,14 +126,18 @@
 
   .brand {
     font-size: 28px;
+grid-column: 1; 
+text-align: center;
   }
 
+  @media (max-width: 640px) {
   .logout {
-    width: 100%;
-    text-align: center;
-    padding: 12px;
-justify-self: stretch;
+    width: auto;         
+    justify-self: center;
+    padding: 8px 16px;   
   }
+}
+
 
   .card {
     padding: 18px;
@@ -223,19 +227,28 @@ function headers() {
 if (payload.role === "moderator" || payload.role === "admin") {
   document.getElementById("moderatorCard").style.display = "block";
 }
+async function safeJson(res) {
+  const text = await res.text();
+  if (text.trim().startsWith("<")) {
+    return [];
+  }
+  return JSON.parse(text);
+}
+
 
 async function authFetch(url, options = {}) {
   const res = await fetch(url, {
     ...options,
-    headers: {
-      ...headers(),
-      ...(options.headers || {})
-    }
+   headers: {
+  ...headers(),
+  ...(options.headers || {})
+}
   });
 
   // 🚨 AUTO-LOGOUT BANNED USERS
   if (res.status === 403) {
-    const data = await res.json();
+    const data = await safeJson(res);
+
     if (data.message === "Account banned") {
       localStorage.clear();
       alert("Your account has been banned.");
@@ -261,7 +274,8 @@ async function loadDashboardCounts() {
   document.getElementById("tripsCount").innerHTML = "";
 
   const notifRes = await authFetch(`${API}/notifications`);
-  const notifs = await notifRes.json();
+  const notifs = await safeJson(notifRes);
+
 
   const unreadNotifs = notifs.filter(
   n =>
@@ -277,7 +291,8 @@ async function loadDashboardCounts() {
   }
 
   const chatRes = await authFetch(`${API}/chat-unread-users`);
-  const chatData = await chatRes.json();
+  const chatData = await safeJson(chatRes);
+
 
   if (chatData.count > 0) {
     document.getElementById("chatCount").innerHTML =
@@ -295,14 +310,15 @@ async function loadDashboardCounts() {
 
   if (role === "moderator" || role === "admin") {
     const repRes = await authFetch(`${API}/reports`);
-    const reps = await repRes.json();
+    const reps = await safeJson(repRes);
+
 
     const pending = reps.filter(r => r.status === "pending").length;
 const verRes = await authFetch(`${API}/verification/pending/count`);
-const pendingVerifications = (await verRes.json()).count;
+const pendingVerifications = (await safeJson(verRes)).count;
 
 const contactRes = await authFetch(`${API}/contact/pending`);
-const pendingContacts = (await contactRes.json()).length;
+const pendingContacts = (await safeJson(contactRes)).length;
 
    document.getElementById("reportCount").innerHTML =
   (pending + pendingVerifications + pendingContacts) > 0

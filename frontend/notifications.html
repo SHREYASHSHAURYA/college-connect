@@ -196,8 +196,10 @@ function setFilter(type) {
 /* LOAD NOTIFICATIONS */
 async function loadNotifications() {
   const res = await authFetch(`${API}/notifications`);
+const text = await res.text();
+if (text.trim().startsWith("<")) return;
+const data = JSON.parse(text);
 
-  const data = await res.json();
   const box = document.getElementById("notifications");
   box.innerHTML = "";
 
