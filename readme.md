@@ -5,9 +5,8 @@ It provides a secure, college-verified environment for communication, collaborat
 
 The platform integrates **forums, real-time chat, marketplace, trips/carpooling, friends system, notifications, and moderation tools** into one unified application.
 
-> 🌐 **Live Site:** https://example-college-connect.com  
-> _(Replace this with the actual deployed link)_
-
+> 🌐 **Live Site:** https://college-connect-o8yt.onrender.com/  
+> 
 ---
 
 ## 📌 Overview
