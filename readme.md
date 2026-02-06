@@ -163,7 +163,6 @@ All content and interactions are **scoped to the user’s college**, ensuring pr
 
 ```
 college-connect/
-├── .git/
 ├── frontend/
 │   ├── app.js
 │   ├── chat.html
