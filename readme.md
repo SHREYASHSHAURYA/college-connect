@@ -235,11 +235,8 @@ college-connect/
 │
 ├── .env
 ├── .gitignore
-├── .hintrc
-├── .nvmrc
 ├── email-test.js
 ├── package.json
-├── package-lock.json
 ├── server.js
 └── socket.js
 ```
