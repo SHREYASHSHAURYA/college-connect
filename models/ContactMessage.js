@@ -5,7 +5,7 @@ const ContactMessageSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      default: null
     },
     email: String,
     subject: String,
