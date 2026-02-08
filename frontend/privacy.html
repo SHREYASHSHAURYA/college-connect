@@ -259,6 +259,7 @@ async function sendContact() {
   const res = await fetch(`${API}/contact/submit`, {
     method: "POST",
     headers: {
+      Authorization: "Bearer " + token,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ subject, message })
