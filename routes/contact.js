@@ -6,7 +6,7 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 /* USER SUBMIT CONTACT MESSAGE */
-router.post("/submit", auth, async (req, res) => {
+router.post("/submit", async (req, res) => {
   const { subject, message } = req.body;
   if (!subject || !message)
     return res.status(400).send("Missing fields");
