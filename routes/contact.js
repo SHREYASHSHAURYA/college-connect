@@ -13,11 +13,12 @@ router.post("/submit", async (req, res) => {
   }
 
   await ContactMessage.create({
-    email: "anonymous",
-    subject,
-    message,
-    status: "pending"
-  });
+  user: null,
+  email: "anonymous",
+  subject,
+  message,
+  status: "pending"
+});
 
   res.send("MESSAGE SENT");
 });
