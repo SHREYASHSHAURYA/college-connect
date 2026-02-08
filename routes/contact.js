@@ -24,14 +24,14 @@ router.post("/submit", async (req, res) => {
 });
 
 /* USER VIEW REPLIES */
-router.get("/mine", auth, async (req, res) => {
+/*router.get("/mine", auth, async (req, res) => {
   const msgs = await ContactMessage.find({
     user: req.user.id,
     reply: { $ne: "" }
   }).sort({ repliedAt: -1 });
 
   res.json(msgs);
-});
+});*/
 
 
 /* MODERATOR VIEW PENDING */
