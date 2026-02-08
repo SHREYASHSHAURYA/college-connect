@@ -5,24 +5,23 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
-/* USER SUBMIT CONTACT MESSAGE */
 router.post("/submit", async (req, res) => {
   const { subject, message } = req.body;
-  if (!subject || !message)
-    return res.status(400).send("Missing fields");
 
-  const user = await User.findById(req.user.id).select("email");
-  if (!user) return res.status(404).send("User not found");
+  if (!subject || !message) {
+    return res.status(400).send("Missing fields");
+  }
 
   await ContactMessage.create({
-    user: user._id,
-    email: user.email,
+    email: "anonymous",
     subject,
-    message
+    message,
+    status: "pending"
   });
 
   res.send("MESSAGE SENT");
 });
+
 /* USER VIEW REPLIES */
 router.get("/mine", auth, async (req, res) => {
   const msgs = await ContactMessage.find({
