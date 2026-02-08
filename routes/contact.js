@@ -40,7 +40,16 @@ router.get("/pending", auth, async (req, res) => {
     return res.status(403).send("Forbidden");
 
   const msgs = await ContactMessage.find({ status: "pending" })
-    .sort({ createdAt: 1 }); // OLDEST → NEWEST
+  .sort({ createdAt: 1 })
+  .lean();
+
+msgs.forEach(m => {
+  if (!m.user) {
+    m.user = { email: "Anonymous user" };
+  }
+});
+
+res.json(msgs);
 
   res.json(msgs);
 });
