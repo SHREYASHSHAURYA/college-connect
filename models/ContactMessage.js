@@ -7,30 +7,42 @@ const ContactMessageSchema = new mongoose.Schema(
       ref: "User",
       default: null
     },
-    email: String,
-    subject: String,
-    message: String,
+    email: {
+      type: String,
+      default: "anonymous"
+    },
+    subject: {
+      type: String,
+      required: true
+    },
+    message: {
+      type: String,
+      required: true
+    },
     reply: {
-  type: String,
-  default: ""
-},
-repliedAt: Date,
+      type: String,
+      default: ""
+    },
+    repliedAt: Date,
     status: {
       type: String,
       enum: ["pending", "handled"],
       default: "pending"
+    },
+
+    expiresAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
     }
   },
   {
-    timestamps: {
-      createdAt: {
-        type: Date,
-        default: Date.now,
-        expires: 60 * 60 * 24 * 30 
-      },
-      updatedAt: true
-    }
+    timestamps: true
   }
+);
+
+ContactMessageSchema.index(
+  { expiresAt: 1 },
+  { expireAfterSeconds: 0 }
 );
 
 module.exports = mongoose.model("ContactMessage", ContactMessageSchema);
