@@ -38,7 +38,7 @@ router.post("/submit", async (req, res) => {
 router.get("/pending", auth, async (req, res) => {
   if (!["moderator", "admin"].includes(req.user.role))
     return res.status(403).send("Forbidden");
-const msgs = await ContactMessage.find({ status: { $in: ["pending", "handled"] } })
+    const msgs = await ContactMessage.find({ status: "pending" })
   .sort({ createdAt: 1 })
   .lean();
 
