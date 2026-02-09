@@ -132,7 +132,7 @@ trip.markModified("pendingRequests");
       remainingTrips.push(trip);
     }
   });
-await Promise.all(trips.map(t => t.save()));
+  
   res.json([...recentFriendTrips, ...remainingTrips]);
 });
 /* REQUEST TO JOIN */
