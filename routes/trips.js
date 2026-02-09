@@ -73,16 +73,20 @@ router.get("/trips", auth, async (req, res) => {
 
 
   if (!me) return res.json([]);
+  console.log("ME COLLEGE:", me.college);
 
-  const blockedIds = me.blockedUsers.map(id => id.toString());
+  const blockedIds = (me.blockedUsers || []).map(id => id.toString());
   const friendIds = me.friends.map(id => id.toString());
 
-  const filter = {
+ const filter = {
   validTill: { $gt: now },
-  creator: { $nin: blockedIds }
+  $or: [
+    { creator: req.user.id },
+    { creator: { $nin: blockedIds } }
+  ]
 };
 
-if (!["moderator", "admin"].includes(req.user.role)) {
+if (!["moderator", "admin"].includes(req.user.role) && me.college) {
   filter.college = me.college;
 }
 
