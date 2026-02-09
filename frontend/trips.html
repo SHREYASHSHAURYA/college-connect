@@ -340,10 +340,8 @@ const finalHighlightTripId =
   if (st) params.push(`to=${encodeURIComponent(st)}`);
   if (params.length) url += "?" + params.join("&");
 
-  const res = await authFetch(url);
-const text = await res.text();
-if (text.trim().startsWith("<")) return;
-const trips = JSON.parse(text);
+ const res = await authFetch(url);
+const trips = await res.json();
 
 
   /* ✅ KEEP: sort by actual trip time */

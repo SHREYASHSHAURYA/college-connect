@@ -73,7 +73,6 @@ router.get("/api/trips", auth, async (req, res) => {
 
 
   if (!me) return res.json([]);
-  console.log("ME COLLEGE:", me.college);
 
   const blockedIds = (me.blockedUsers || []).map(id => id.toString());
   const friendIds = me.friends.map(id => id.toString());
@@ -94,7 +93,7 @@ if (!["moderator", "admin"].includes(req.user.role) && me.college) {
   if (from) filter.from = new RegExp(from, "i");
   if (to) filter.to = new RegExp(to, "i");
 
-  const trips = await Trip.find({})
+  const trips = await Trip.find(filter)
   .populate("creator", "name email profilePic blockedUsers isBanned")
   .populate("passengers", "name email isBanned")
   .populate("pendingRequests", "name email isBanned")
