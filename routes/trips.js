@@ -52,7 +52,7 @@ router.post("/create-trip", auth, requireVerified, async (req, res) => {
     link: "/trips.html"
   });*/
 
-  res.send("TRIP CREATED");
+  return res.send("TRIP CREATED");
 });
 
 /* LIST TRIPS */
@@ -165,7 +165,7 @@ router.get("/request-join-trip", auth, requireVerified, async (req, res) => {
     link: `/trips.html#trip=${trip._id}`
   });
 
-  res.send("REQUEST SENT");
+  return res.send("REQUEST SENT");
 });
 
 /* APPROVE REQUEST */
@@ -197,7 +197,7 @@ router.get("/approve-trip-request", auth, requireVerified, async (req, res) => {
     link: `/trips.html#trip=${trip._id}`
   });
 
-  res.send("REQUEST APPROVED");
+  return res.send("REQUEST APPROVED");
 });
 
 /* DELETE TRIP */
@@ -220,7 +220,7 @@ router.get("/delete-trip", auth, async (req, res) => {
     link: "/trips.html"
   });*/
 
-  res.send("TRIP DELETED");
+  return res.send("TRIP DELETED");
 });
 
 module.exports = router;

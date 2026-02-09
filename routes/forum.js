@@ -33,7 +33,7 @@ router.post(
     });
 
     await post.save();
-    res.send("POST CREATED");
+    return res.send("POST CREATED");
   }
 );
 
@@ -105,7 +105,7 @@ router.get("/edit-post", auth, requireVerified, async (req, res) => {
   post.content = content;
   await post.save();
 
-  res.send("POST UPDATED");
+  return res.send("POST UPDATED");
 });
 
 /* DELETE POST */
@@ -128,7 +128,7 @@ router.get("/delete-post", auth, requireVerified, async (req, res) => {
 /* 🔥 THEN DELETE DB RECORD */
   await post.deleteOne();
 
-  res.send("POST DELETED");
+  return res.send("POST DELETED");
 });
 
 /* REPLY */
@@ -174,7 +174,7 @@ router.get("/reply-post", auth, requireVerified, async (req, res) => {
     });
   }
 
-  res.send("REPLY ADDED");
+  return res.send("REPLY ADDED");
 });
 
 /* EDIT REPLY */
@@ -192,7 +192,7 @@ router.get("/edit-reply", auth, async (req, res) => {
   reply.text = text;
   await post.save();
 
-  res.send("REPLY UPDATED");
+  return res.send("REPLY UPDATED");
 });
 
 /* DELETE REPLY */
@@ -210,7 +210,7 @@ router.get("/delete-reply", auth, async (req, res) => {
   reply.deleteOne();
   await post.save();
 
-  res.send("REPLY DELETED");
+  return res.send("REPLY DELETED");
 });
 
 // ===== MODERATOR FORUM DELETE =====
@@ -228,7 +228,7 @@ router.delete("/moderator/forum/post/:postId", auth, async (req, res) => {
   });
 
   await post.deleteOne();
-  res.send("POST DELETED");
+  return res.send("POST DELETED");
 });
 
 router.delete("/moderator/forum/comment/:postId/:replyId", auth, async (req, res) => {
@@ -243,7 +243,7 @@ router.delete("/moderator/forum/comment/:postId/:replyId", auth, async (req, res
 
   reply.deleteOne();
   await post.save();
-  res.send("COMMENT DELETED");
+  return res.send("COMMENT DELETED");
 });
 
 module.exports = router;

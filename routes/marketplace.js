@@ -40,7 +40,7 @@ router.post(
     });
 
     await item.save();
-    res.send("ITEM ADDED");
+    return res.send("ITEM ADDED");
   }
 );
 
@@ -111,7 +111,7 @@ router.get("/mark-sold", auth, async (req, res) => {
   item.status = "SOLD";
   await item.save();
 
-  res.send("MARKED SOLD");
+  return res.send("MARKED SOLD");
 });
 
 /*
@@ -135,7 +135,7 @@ router.get("/reserve-item", auth, async (req, res) => {
   item.reservedAt = new Date();
   await item.save();
 
-  res.send("ITEM RESERVED");
+  return res.send("ITEM RESERVED");
 });
 /*
 UNRESERVE ITEM
@@ -154,7 +154,7 @@ router.get("/unreserve-item", auth, async (req, res) => {
   item.status = "AVAILABLE";
   await item.save();
 
-  res.send("UNRESERVED");
+  return res.send("UNRESERVED");
 });
 
 /*
@@ -182,7 +182,7 @@ router.get("/delete-item", auth, async (req, res) => {
 /* 🔥 THEN DELETE DB RECORD */
   await Item.findByIdAndDelete(id);
 
-  res.send("ITEM DELETED");
+  return res.send("ITEM DELETED");
 });
 
 /*
@@ -215,7 +215,7 @@ router.post("/add-item-comment", auth, requireVerified, async (req, res) => {
     });
   }
 
-  res.send("COMMENT ADDED");
+  return res.send("COMMENT ADDED");
 });
 
 /*
@@ -251,7 +251,7 @@ router.post("/reply-item-comment", auth, requireVerified, async (req, res) => {
     });
   }
 
-  res.send("REPLY ADDED");
+  return res.send("REPLY ADDED");
 });
 
 // ===== MODERATOR MARKETPLACE DELETE =====
@@ -269,7 +269,7 @@ router.delete("/moderator/marketplace/item/:itemId", auth, async (req, res) => {
   });
 
   await item.deleteOne();
-  res.send("ITEM DELETED");
+  return res.send("ITEM DELETED");
 });
 
 router.delete("/moderator/marketplace/comment/:itemId/:commentId", auth, async (req, res) => {
@@ -284,7 +284,7 @@ router.delete("/moderator/marketplace/comment/:itemId/:commentId", auth, async (
 
   comment.deleteOne();
   await item.save();
-  res.send("COMMENT DELETED");
+  return res.send("COMMENT DELETED");
 });
 
 router.delete(
@@ -305,7 +305,7 @@ router.delete(
 
     reply.deleteOne();
     await item.save();
-    res.send("REPLY DELETED");
+    return res.send("REPLY DELETED");
   }
 );
 
