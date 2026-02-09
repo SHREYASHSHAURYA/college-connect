@@ -290,9 +290,17 @@ if (validTill && new Date(validTill) <= new Date(dateTime)) {
     ).toISOString();
   }
 
-  await authFetch(
-  `${API}/create-trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&dateTime=${encodeURIComponent(dateTime)}&validTill=${encodeURIComponent(validTill)}&passengerLimit=${passengerLimit}`
-);
+  await authFetch(`${API}/create-trip`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    from,
+    to,
+    dateTime,
+    validTill,
+    passengerLimit
+  })
+});
 
   /* 🔔 EXISTING */
   localStorage.setItem(

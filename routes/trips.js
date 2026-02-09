@@ -7,9 +7,8 @@ const requireVerified = require("../middleware/requireVerified");
 
 const router = express.Router();
 
-/* CREATE TRIP */
-router.get("/create-trip", auth, requireVerified, async (req, res) => {
-  const { from, to, dateTime, validTill, passengerLimit } = req.query;
+router.post("/create-trip", auth, requireVerified, async (req, res) => {
+  const { from, to, dateTime, validTill, passengerLimit } = req.body;
   if (!from || !to || !dateTime || !passengerLimit)
     return res.send("Missing params");
 

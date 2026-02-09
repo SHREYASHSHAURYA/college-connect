@@ -48,10 +48,7 @@ msgs.forEach(m => {
     m.user = { email: "Anonymous user" };
   }
 });
-
 res.json(msgs);
-
-  res.json(msgs);
 });
 
 /* MODERATOR REPLY */
