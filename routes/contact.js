@@ -33,6 +33,17 @@ router.post("/submit", async (req, res) => {
   res.json(msgs);
 });*/
 
+/* PRIVACY PAGE — VIEW REPLIES (ANONYMOUS) */
+router.get("/public-replies", async (req, res) => {
+  const msgs = await ContactMessage.find({
+    email: "anonymous",
+    reply: { $ne: "" }
+  })
+    .sort({ repliedAt: -1 })
+    .select("subject message reply repliedAt");
+
+  res.json(msgs);
+});
 
 /* MODERATOR VIEW PENDING */
 router.get("/pending", auth, async (req, res) => {
