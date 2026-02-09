@@ -82,7 +82,7 @@ router.get("/trips", auth, async (req, res) => {
 };
 
 if (!["moderator", "admin"].includes(req.user.role)) {
-  filter.college = me.college;
+  filter.college = me.college.toString();
 }
 
 
