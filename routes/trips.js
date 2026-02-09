@@ -94,7 +94,7 @@ if (!["moderator", "admin"].includes(req.user.role) && me.college) {
   if (from) filter.from = new RegExp(from, "i");
   if (to) filter.to = new RegExp(to, "i");
 
-  const trips = await Trip.find(filter)
+  const trips = await Trip.find({})
   .populate("creator", "name email profilePic blockedUsers isBanned")
   .populate("passengers", "name email isBanned")
   .populate("pendingRequests", "name email isBanned")
