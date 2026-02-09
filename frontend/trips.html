@@ -334,7 +334,7 @@ const finalHighlightTripId =
   const sf = document.getElementById("searchFrom").value;
   const st = document.getElementById("searchTo").value;
 
-  let url = `${API}/trips`;
+  let url = `${API}/api/trips`;
   const params = [];
   if (sf) params.push(`from=${encodeURIComponent(sf)}`);
   if (st) params.push(`to=${encodeURIComponent(st)}`);

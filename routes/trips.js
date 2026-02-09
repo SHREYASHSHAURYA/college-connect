@@ -57,7 +57,7 @@ router.post("/create-trip", auth, requireVerified, async (req, res) => {
 
 /* LIST TRIPS */
 /* LIST TRIPS (FRIENDS FIRST) */
-router.get("/trips", auth, async (req, res) => {
+router.get("/api/trips", auth, async (req, res) => {
   // 🧹 HARD DELETE trips created by banned users
   const bannedUsers = await User.find({ isBanned: true }).select("_id");
   const bannedIds = bannedUsers.map(u => u._id);
