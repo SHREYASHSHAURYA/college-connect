@@ -37,7 +37,7 @@ router.post("/create-trip", auth, requireVerified, async (req, res) => {
     validTill: vt,
     passengerLimit: Number(passengerLimit),
     creator: user._id,
-    college: user.college.toString(),
+    college: user.college,
     passengers: [user._id],
     pendingRequests: []
   });
@@ -82,7 +82,7 @@ router.get("/trips", auth, async (req, res) => {
 };
 
 if (!["moderator", "admin"].includes(req.user.role)) {
-  filter.college = me.college.toString();
+  filter.college = me.college;
 }
 
 
@@ -132,7 +132,7 @@ trip.markModified("pendingRequests");
       remainingTrips.push(trip);
     }
   });
-  
+
   res.json([...recentFriendTrips, ...remainingTrips]);
 });
 /* REQUEST TO JOIN */
