@@ -37,7 +37,7 @@ router.post("/create-trip", auth, requireVerified, async (req, res) => {
     validTill: vt,
     passengerLimit: Number(passengerLimit),
     creator: user._id,
-    college: user.college,
+    college: user.college.toString(),
     passengers: [user._id],
     pendingRequests: []
   });
