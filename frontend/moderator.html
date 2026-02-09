@@ -552,13 +552,16 @@ function viewUser(email) {
   window.location.href = `/profile?email=${encodeURIComponent(email)}`;
 }
 
-// 🔁 POLLING — refresh reports every 5 seconds
 setInterval(() => {
   loadBannedUsers();
   loadReports();
   loadVerificationRequests();
-loadContactMessages();
+
+  if (document.activeElement.tagName !== "TEXTAREA") {
+    loadContactMessages();
+  }
 }, 5000);
+
 // 🔍 IMAGE CLICK PREVIEW (MODERATOR)
 document.addEventListener("click", e => {
   if (e.target.tagName === "IMG") {
