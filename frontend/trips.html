@@ -291,7 +291,7 @@ if (validTill && new Date(validTill) <= new Date(dateTime)) {
   }
 
   await authFetch(
-  `${API}/create-trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&dateTime=${dateTime}&validTill=${validTill}&passengerLimit=${passengerLimit}`
+  `${API}/create-trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&dateTime=${encodeURIComponent(dateTime)}&validTill=${encodeURIComponent(validTill)}&passengerLimit=${passengerLimit}`
 );
 
   /* 🔔 EXISTING */
