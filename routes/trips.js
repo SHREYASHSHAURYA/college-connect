@@ -69,7 +69,8 @@ router.get("/trips", auth, async (req, res) => {
   const now = new Date();
 
   const me = await User.findById(req.user.id)
-    .select("friends college blockedUsers");
+  .select("_id friends college blockedUsers");
+
 
   if (!me) return res.json([]);
 
