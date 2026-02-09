@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const tripSchema = new mongoose.Schema({
+const tripSchema = new mongoose.Schema(
+{
+
   from: { type: String, required: true },
   to: { type: String, required: true },
 
@@ -44,7 +46,10 @@ const tripSchema = new mongoose.Schema({
     type: String,
     required: true
   }
-});
+},
+{ timestamps: true }
+);
+
 
 module.exports = mongoose.model("Trip", tripSchema);
 
