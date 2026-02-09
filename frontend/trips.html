@@ -267,6 +267,7 @@ async function createTrip() {
   const to = document.getElementById("to").value;
   const dateTime = new Date(document.getElementById("dateTime").value).toISOString();
   let validTill = document.getElementById("validTill").value;
+if (validTill) validTill = new Date(validTill).toISOString();
   const passengerLimit = document.getElementById("passengerLimit").value;
 
   if (!from || !to || !dateTime || !passengerLimit) {
