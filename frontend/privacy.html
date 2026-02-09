@@ -291,12 +291,18 @@ async function loadContactReplies() {
     const div = document.createElement("div");
     div.style.marginBottom = "14px";
     div.innerHTML = `
-      <b>${r.subject}</b><br>
-      <div style="margin-top:6px">${r.reply}</div>
-      <div style="font-size:12px;color:#9ca3af;margin-top:6px">
-        ${new Date(r.repliedAt).toLocaleString()}
-      </div>
-    `;
+  <b>Subject:</b> ${r.subject}<br><br>
+
+  <b>User message:</b>
+  <div style="margin:6px 0">
+    ${r.message}
+  </div>
+
+  <b>Moderator reply:</b>
+  <div style="margin-top:6px">
+    ${r.reply}
+  </div>
+`;
     box.appendChild(div);
   });
 }
